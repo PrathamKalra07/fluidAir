@@ -10,7 +10,7 @@ export default function Rest() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Rest!</Text>
-      <Button title="Go to Home" onPress={() => navigation.navigate('Rest')} />
+      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
     </View>
   );
 }
