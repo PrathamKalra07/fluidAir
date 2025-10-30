@@ -1,3 +1,29 @@
+// {
+  // "extends": "@react-native/typescript-config",
+// <<<<<<< HEAD
+//   "include": [
+//     "**/*.ts",
+//     "**/*.tsx",
+//     "nativewind-env.d.ts"
+//   ],
+//   "exclude": [
+//     "**/node_modules",
+//     "**/Pods"
+//   ]
+// }
+// =======
+//   "include": ["**/*.ts", "**/*.tsx"],
+//   "exclude": ["**/node_modules", "**/Pods"],
+//   "compilerOptions": {
+//     "target": "es5",
+//     "lib": [
+//       "es2015",
+//       "dom"
+//     ],
+//   }
+// }
+// >>>>>>> ab108a6bb39f4541410e26476ed6140ff4ebb00c
+
 {
   "extends": "@react-native/typescript-config",
   "include": [
@@ -8,5 +34,12 @@
   "exclude": [
     "**/node_modules",
     "**/Pods"
-  ]
+  ],
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "es2015",
+      "dom"
+    ]
+  }
 }

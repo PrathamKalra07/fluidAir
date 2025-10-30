@@ -48,6 +48,8 @@ export default function HomeScreen() {
             <Button title="Orders" onPress={()=>setActiveTab('orders')} />
             <Button title="Help" onPress={()=>setActiveTab('help')} />
             <Button title="Contact" onPress={()=>setActiveTab('contact')} />
+            <Button title="Rest" onPress={()=>navigation.navigate('Rest')} />
+
           </View>
     </View>
   );
