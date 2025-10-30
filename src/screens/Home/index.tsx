@@ -12,9 +12,9 @@ export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState("profile");
 
   const navigation = useNavigation();
-  useEffect(()=>{
-    renderScreen();
-  },[activeTab])
+  // useEffect(()=>{
+    // renderScreen();
+  // },[])
 
   const renderScreen = () => {
     switch (activeTab) {
@@ -34,11 +34,15 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Home!</Text>
-      <Button title="Go to Login" onPress={() => navigation.navigate('Login')} />
+      {/* <Text style={styles.title}>Welcome Home!</Text> */}
+      {/* <Button title="Go to Login" onPress={() => navigation.navigate('Login')} /> */}
       {/* <Button title="Go to Rest" onPress={() => navigation.navigate('Rest')} /> */}
 
-       <View style={styles.navbar}>
+      <View style={{width:'100%'}}><NavigationBar /></View>
+
+      <View className='pt-[140] pb-[100]' >{renderScreen()}</View>
+
+       <View style={styles.bottomNavbar}>
             {/* <Text style={styles.title}>Welcome Orders!</Text> */}
             <Button title="Profile" onPress={()=>setActiveTab('profile')} />
             <Button title="Orders" onPress={()=>setActiveTab('orders')} />

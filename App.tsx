@@ -6,22 +6,27 @@
  */
 
 import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
+import "./global.css";
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      {/* <AppContent /> */}
-      <AppNavigator />;
-    </SafeAreaProvider>
+    // <SafeAreaProvider>
+    <>
+    <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+    {/* <AppContent /> */}
+    {/* <Text className='text-blue-400 text-center' >hiiiii</Text> */}
+    <AppNavigator />;
+    
+    </>
+    // </SafeAreaProvider>
   );
 }
 

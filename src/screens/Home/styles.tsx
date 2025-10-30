@@ -3,14 +3,15 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    flexDirection:'column',
+    // justifyContent: 'space-around',
+    // alignItems: 'center'
   },
   title: {
     fontSize: 22,
     fontWeight: '600',
   },
-  navbar: {
+  bottomNavbar: {
     // flex: 1,
     position: 'absolute',
     bottom: 0,
