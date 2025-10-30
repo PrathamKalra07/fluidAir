@@ -8,7 +8,7 @@ export default function Help() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Orders!</Text>
+      <Text style={styles.title}>Welcome Help!</Text>
       <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
     </View>
   );

@@ -8,7 +8,7 @@ export default function Contact() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Orders!</Text>
+      <Text style={styles.title}>Welcome Contact!</Text>
       <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
     </View>
   );
