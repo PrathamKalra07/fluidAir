@@ -14,6 +14,9 @@ const fetchUserSessionId = async () => {
     tagNameProcessors: [stripNS],
     explicitArray: false,
   };
+
+  
+  console.log('password' ,password)
   const axiosConfig = {
     headers: {
       SOAPAction: "''",
@@ -30,19 +33,27 @@ const fetchUserSessionId = async () => {
     </soapenv:Body>
   </soapenv:Envelope>`;
 
+      console.log('xmlBody' ,xmlBody)
+
   const authRes = await axios.post(endpoint, xmlBody, axiosConfig);
   return new Promise((resolve, reject) => {
     
     parseString(authRes.data, options, function (err: any, result: any) {
       if (err) {
+        console.log('err => '+ err.message);
         return reject({
           message: err.message,
           error: true,
           data: null,
         });
+
       } else {
+         console.log('success');
+         
         const sessionId =
           result.Envelope.Body.loginResponse.result.sessionId ?? '';
+           console.log('sessionId ', sessionId);
+           
         return resolve({
           message: 'OK',
           error: false,

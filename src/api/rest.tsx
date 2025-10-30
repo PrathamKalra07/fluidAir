@@ -16,7 +16,17 @@ export function querySalesforce(
   instanceUrl: string,
   soqlQuery: string
 ): Promise<SalesforceRecord[]> {
-  const queryEndpoint = `${instanceUrl}/services/data/v56.0/query?q=${encodeURIComponent(soqlQuery)}`;
+
+
+  function encodeSOQL(soqlQuery: string): string {
+  return encodeURIComponent(soqlQuery).replace(/%20/g, '+');
+}
+
+  const queryEndpoint = `${instanceUrl}/services/data/v56.0/query?q=${encodeSOQL(soqlQuery)}`;
+
+  console.log('queryEndpoint ->> '+queryEndpoint)
+  console.log('soqlQuery ->> '+encodeSOQL(soqlQuery))
+  console.log('accessToken ->> '+accessToken)
 
   return axios
     .get<SalesforceApiResponse>(queryEndpoint, {
