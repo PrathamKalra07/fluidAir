@@ -16,13 +16,17 @@
 // }
 
 // import "../../../globals.css";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native';
 import profileLogo from '../../assets/profileLogo.png';
 import { styles } from './styles';
+import { getAccountDetails } from '../../api/orders.api';
 // import { MapPin } from 'lucide-react-native';
 
 export default function Profile() {
+
+
+
   return (
     <ScrollView className="">
       {/* <Text className="font-extrabold text-green-200">Welcome Profile!</Text> */}

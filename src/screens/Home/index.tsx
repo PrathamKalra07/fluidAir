@@ -7,14 +7,23 @@ import Profile from '../Profile';
 import Orders from '../Orders';
 import Help from '../Help';
 import Contact from '../Contact';
+import { fetchUserSessionId } from '../../api/restUtils';
 
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState("profile");
+  const [sessionId, setSessionId] = useState('');
 
   const navigation = useNavigation();
-  // useEffect(()=>{
-    // renderScreen();
-  // },[])
+  
+  const getSession = async ()=>{
+    const data = await fetchUserSessionId();
+    setSessionId(data.data)
+  }
+  
+  useEffect(()=>{
+    getSession();
+  },[])
+
 
   const renderScreen = () => {
     switch (activeTab) {
