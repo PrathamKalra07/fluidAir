@@ -6,12 +6,15 @@
  */
 
 import { NewAppScreen } from '@react-native/new-app-screen';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, StyleSheet, useColorScheme,  Text ,View} from 'react-native';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import "./global.css";
+import AppNavigator from './src/navigation/AppNavigator';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -20,10 +23,7 @@ function App() {
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       {/* <AppContent /> */}
-      <View className="bg-blue-100">
-
-      <Text className="text-white text-center" >Hiii</Text>
-      </View>
+      <AppNavigator />;
     </SafeAreaProvider>
   );
 }
