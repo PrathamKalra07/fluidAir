@@ -23,10 +23,14 @@ import { styles } from './styles';
 import { getAccountDetails } from '../../api/orders.api';
 // import { MapPin } from 'lucide-react-native';
 
-export default function Profile() {
 
+type ProfileProps = {
+  account: Record<string, any> | null;
+  // sessionId: string;
+  products : Record<string, any>[] | null;
+};
 
-
+export default function Profile({ account, products }: ProfileProps) {
   return (
     <ScrollView className="">
       {/* <Text className="font-extrabold text-green-200">Welcome Profile!</Text> */}
@@ -38,9 +42,9 @@ export default function Profile() {
           </View>
           <View className="">
             <Text className="text-black align-middle w-52 text-3xl font-medium">
-              John Doe
+              {account?.Primary_Contact__r.Name}
             </Text>
-            <Text className="text-gray-600">Acme Corporation</Text>
+            <Text className="text-gray-600">{account?.Name}</Text>
           </View>
         </View>
         <View className="border-b border-gray-400 w-[85%] mx-auto my-5"></View>
@@ -48,16 +52,16 @@ export default function Profile() {
           <View className="">
             <View className="w-[90%] mx-auto mb-5">
               <Text className="text-sm text-gray-500">Email Address</Text>
-              <Text className="text-xl">john.doe@example.com</Text>
+              <Text className="text-xl">{account?.Primary_Contact_Email__c}</Text>
             </View>
             <View className="w-[90%] mx-auto mb-5">
               <Text className="text-sm text-gray-500">Phone Number</Text>
-              <Text className="text-xl">+1 (555) 123-4567</Text>
+              <Text className="text-xl">{account?.Phone}</Text>
             </View>
             <View className="w-[90%] mx-auto mb-5">
               <Text className="text-sm text-gray-500">Address</Text>
-              <Text className="text-xl">123 Main Street, Suite 100</Text>
-              <Text className="text-xl">New York, NY 10001</Text>
+              <Text className="text-xl">{account?.Mailing_Street__c}</Text>
+              <Text className="text-xl">{account?.Mailing_City__c + " - "+ account?.Mailing_ZIP__c}</Text>
             </View>
             <View className='mb-3'>
               <TouchableOpacity className='mx-auto bg-[#80062e] p-3 rounded-xl'><Text className='text-white'>Edit Profile</Text></TouchableOpacity>
@@ -71,12 +75,22 @@ export default function Profile() {
           Installed Products
         </Text>
       </View>
-      <View className='border border-gray-400 w-[80%] mx-auto rounded-xl py-2 px-4 mb-4'>
-        <Text className='text-lg font-medium my-1'>PRO-2451</Text>
-        <Text className='text-sm font-medium my-1'>Industrial Air Compressor - 50HP Variable Speed Drive</Text>
-        <Text className='text-sm text-rose-900 font-medium my-1'>Main Manufacturing Facility</Text>
-      </View>
-      <View className='border border-gray-400 w-[80%] mx-auto rounded-xl py-2 px-4 mb-4'>
+
+      {products?.map((product, index) => (
+  <View
+    key={index}
+    className="border border-gray-400 w-[80%] mx-auto rounded-xl py-2 px-4 mb-4"
+  >
+    <Text className="text-lg font-medium my-1">{product.Name}</Text>
+    <Text className="text-sm font-medium my-1">
+      {product.Short_Description__c || 'No description available'}
+    </Text>
+    <Text className="text-sm text-rose-900 font-medium my-1">
+      {product.Site_Name__c || 'Unknown location'}
+    </Text>
+  </View>
+))}
+      {/* <View className='border border-gray-400 w-[80%] mx-auto rounded-xl py-2 px-4 mb-4'>
         <Text className='text-lg font-medium my-1'>PRO-2451</Text>
         <Text className='text-sm font-medium my-1'>Industrial Air Compressor - 50HP Variable Speed Drive</Text>
         <Text className='text-sm text-rose-900 font-medium my-1'>Main Manufacturing Facility</Text>
@@ -86,7 +100,7 @@ export default function Profile() {
         <Text className='text-lg font-medium my-1'>PRO-2451</Text>
         <Text className='text-sm font-medium my-1'>Industrial Air Compressor - 50HP Variable Speed Drive</Text>
         <Text className='text-sm text-rose-900 font-medium my-1'>Main Manufacturing Facility</Text>
-      </View>
+      </View> */}
 
     </ScrollView>
   );

@@ -11,9 +11,9 @@ export default function Splash() {
     const timer = setTimeout(()=>{
       // if user is logged in, navigate to home else navigate to login
       // if(!user){
-        // navigation.navigate('Login');
+        navigation.navigate('Login');
       // }else{
-        navigation.navigate('Home');
+        // navigation.navigate('Home');
       // }r
     },1500);
 

@@ -26,12 +26,11 @@ type userInfo = {
 
 //to fetch session for salesforce callout
 const fetchUserSessionId = async () : Promise<response> => {
-  const endpoint = ${process.env.PROD_LOGIN_URL}/services/Soap/u/57.0;
+  const endpoint = `${process.env.PROD_LOGIN_URL}/services/Soap/u/57.0`;
 
   console.log('endpoint', endpoint);
 
-  const password =
-    ${process.env.FLUIDAIR_PASSWORD} + ${process.env.SECURITY_TOKEN};
+  const password =`${process.env.FLUIDAIR_PASSWORD}` + `${process.env.SECURITY_TOKEN}`;
   let parseString = xml2JS.parseString;
   let stripNS = xml2JS.processors.stripPrefix;
   const options = {
@@ -93,10 +92,10 @@ const querySalesforce = async (
   accessToken: string,
   soqlQuery: string
 ): Promise<SalesforceRecord[]> => {
-
+  
   soqlQuery = encodeURIComponent(soqlQuery).replace(/%20/g, '+');
-  const queryEndpoint = ${process.env.REST_BASE_URL}/services/data/v56.0/query?q=${soqlQuery};
-
+  const queryEndpoint = `${process.env.REST_BASE_URL}/services/data/v56.0/query?q=${soqlQuery}`;
+  
   console.log('queryEndpoint ->> '+queryEndpoint)
   console.log('soqlQuery ->> '+soqlQuery)
   console.log('accessToken ->> '+accessToken)
@@ -104,14 +103,14 @@ const querySalesforce = async (
   return axios
     .get<SalesforceApiResponse>(queryEndpoint, {
       headers: {
-        Authorization: Bearer ${accessToken},
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     })
     .then(response => response.data.records)
     .catch(error => {
       const message = error.response
-        ? Salesforce query failed: ${error.response.status} ${error.response.statusText}
+        ? `Salesforce query failed: ${error.response.status} ${error.response.statusText}`
         : error.message;
       return Promise.reject(new Error(message));
     });

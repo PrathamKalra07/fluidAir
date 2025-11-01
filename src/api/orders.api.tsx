@@ -22,7 +22,7 @@ const getAccountDetails = async(accessToken : string , userInfo : userInfo) =>{
     let soqlQuery : string = '';
     let accountInfo : SalesforceRecord = {Id :''};
 
-    soqlQuery = "SELECT Id, Name FROM Account WHERE Primary_Contact_Email__c = '" + userInfo?.email.replace(/'/g, "\\'") + "' LIMIT 1";
+    soqlQuery = "SELECT Id, Name , Phone ,Primary_Contact__r.Name, Primary_Contact_Email__c, Mailing_Street__c , Mailing_City__c , Mailing_State__c , Mailing_ZIP__c , Mailing_Country__c FROM Account WHERE Primary_Contact_Email__c = '" + userInfo?.email.replace(/'/g, "\\'") + "' LIMIT 1";
     // soqlQuery = 'SELECT Id, Name FROM ACCOUNT  LIMIT 5';
 
     let accountResult : SalesforceRecord[] =  await querySalesforce(
@@ -45,14 +45,11 @@ const getAccountProducts = async(accessToken : string  , accountInfo : Salesforc
     let soqlQuery : string = '';
     let accountProducts : SalesforceRecord[] = [];
 
-    // soqlQuery = "SELECT Id ,Name, FConnect__Account__c ,FConnect__Account__r.Name  FROM FConnect__Service_Order__c WHERE FConnect__Account__c  = " + accountInfo?.Id.replace(/'/g, "\\'") + "' LIMIT 10" ;
-    soqlQuery = `SELECT Id, Name, FConnect__Account__c, FConnect__Account__r.Name 
-    FROM FConnect__Service_Order__c 
-    WHERE FConnect__Account__c = '${accountInfo?.Id}' 
-    LIMIT 10`;
+    soqlQuery = "SELECT Id ,Name, FConnect__Account__c ,FConnect__Account__r.Name  FROM FConnect__Service_Order__c WHERE FConnect__Account__c  = " + accountInfo?.Id.replace(/'/g, "\\'") + "' LIMIT 10" ;
+    // soqlQuery = `SELECT Id, Name, FConnect__Account__c, FConnect__Account__r.Name , Short_Description__c , Site_Name__c , Account_Status__c FROM FConnect__Service_Order__c WHERE FConnect__Account__c = "${accountInfo?.Id.replace(/'/g, "\\'")}" LIMIT 10`;
+            
 
-
-        console.log('ok 1')
+        console.log('ok 1 query : ',soqlQuery );
     accountProducts  = await querySalesforce(
         accessToken,
         soqlQuery
