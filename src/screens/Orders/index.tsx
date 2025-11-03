@@ -8,8 +8,7 @@ export default function Orders() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Orders!</Text>
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+
     </View>
   );
 }

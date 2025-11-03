@@ -18,7 +18,7 @@
 // import "../../../globals.css";
 import React, { useEffect } from 'react';
 import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native';
-import profileLogo from '../../assets/profileLogo.png';
+import ProfileLogo from '../../assets/profileLogo.svg';
 import { styles } from './styles';
 import { getAccountDetails } from '../../api/orders.api';
 // import { MapPin } from 'lucide-react-native';
@@ -38,10 +38,10 @@ export default function Profile({ account, products }: ProfileProps) {
       <View className=" w-[80%] mx-auto px-2 py-5 border-gray-400 border rounded-xl overflow-visible mt-5">
         <View className="flex-1 flex-row justify-evenly items-center">
           <View className="">
-            <Image className="h-28 w-28" source={profileLogo}></Image>
+            <ProfileLogo height={100} width={100} />
           </View>
-          <View className="">
-            <Text className="text-black align-middle w-52 text-3xl font-medium">
+          <View className="ml-2 -mr-2">
+            <Text className="text-black align-middle w-52 text-2xl font-medium">
               {account?.Primary_Contact__r.Name}
             </Text>
             <Text className="text-gray-600">{account?.Name}</Text>
