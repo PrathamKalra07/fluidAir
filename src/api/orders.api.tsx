@@ -36,7 +36,7 @@ const getAccountProducts = async(accessToken : string  , accountInfo : Salesforc
     let soqlQuery : string = '';
     let accountProducts : SalesforceRecord[] = [];
 
-    soqlQuery = `SELECT Id, Name, FConnect__Customer__c, FConnect__Customer__r.Name, Short_Description__c, FConnect__Site__r.Name, Account_Status__c, Status_Indicator__c FROM FConnect__Installed_Products__c WHERE FConnect__Customer__c = '${accountInfo?.Id}'`;
+    soqlQuery = `SELECT Id, Name, FConnect__Customer__c, FConnect__Customer__r.Name, Short_Description__c, FConnect__Site__r.Name, Account_Status__c, Status_Indicator__c, Status__c FROM FConnect__Installed_Products__c WHERE FConnect__Customer__c = '${accountInfo?.Id}'`;
     
     accountProducts  = await querySalesforce(
         accessToken,

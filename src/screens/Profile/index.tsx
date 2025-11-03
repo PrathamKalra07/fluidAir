@@ -21,6 +21,7 @@ import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native';
 import ProfileLogo from '../../assets/profileLogo.svg';
 import { styles } from './styles';
 import { getAccountDetails } from '../../api/orders.api';
+import PinRed from '../../assets/pinRed.svg';
 // import { MapPin } from 'lucide-react-native';
 
 
@@ -56,7 +57,7 @@ export default function Profile({ account, products }: ProfileProps) {
             </View>
             <View className="w-[90%] mx-auto mb-5">
               <Text className="text-sm text-gray-500">Phone Number</Text>
-              <Text className="text-xl">{account?.Phone}</Text>
+              <Text className="text-xl">{account?.Primary_Contact_Phone__c}</Text>
             </View>
             <View className="w-[90%] mx-auto mb-5">
               <Text className="text-sm text-gray-500">Address</Text>
@@ -81,13 +82,24 @@ export default function Profile({ account, products }: ProfileProps) {
     key={index}
     className="border border-gray-400 w-[80%] mx-auto rounded-xl py-2 px-4 mb-4"
   >
+    {product.Status__c==='Active' ? 
+    <View className='flex-1 flex-row items-center absolute right-4'>
+      <Text className='text-4xl  text-green-600'>•</Text><Text className=' text-green-600'>Active</Text>
+    </View>:
+    <View className='flex-1 flex-row items-center absolute right-4'>
+      <Text className='text-4xl  text-gray-600'>•</Text><Text className=' text-gray-600'>Inactive</Text>
+    </View>
+    }
     <Text className="text-lg font-medium my-1">{product.Name}</Text>
     <Text className="text-sm font-medium my-1">
       {product.Short_Description__c || 'No description available'}
     </Text>
+    <View className='flex-1 flex-row items-center gap-1'>
+    <PinRed width={14} height={14} />
     <Text className="text-sm text-rose-900 font-medium my-1">
-      {product.Site_Name__c || 'Unknown location'}
+      {product.FConnect__Site__r.Name || 'Unknown location'}
     </Text>
+    </View>
   </View>
 ))}
       {/* <View className='border border-gray-400 w-[80%] mx-auto rounded-xl py-2 px-4 mb-4'>

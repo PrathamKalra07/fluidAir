@@ -26,7 +26,8 @@ export default function HomeScreen() {
   const [isLoading, setIsLoading] = useState(false);
 
   const userInfo = {
-    email: 'aaron@plastechengineering.com',
+    // email: 'aaron@plastechengineering.com',
+    email  : 'bmay@anchorabrasives.com',
     name: 'Plas-Tech Engineering ',
   };
 
@@ -88,18 +89,17 @@ export default function HomeScreen() {
         </View>
       ) : (
         <>
-          <View className="pt-[120] pb-[100]">{renderScreen()}</View>
+          <View className="pt-[120] pb-[90]">{renderScreen()}</View>
 
           <View className="border-t border-gray-400 pb-5" style={styles.bottomNavbar}>
-            <TouchableOpacity className={activeTab==='profile'?'bg-rose-100 p-2 rounded-3xl w-[21%] items-center':'p2 w-[21%] items-center'} onPress={() => setActiveTab('profile')}>{activeTab==='profile'?<Profile2 width={36} height={36} />:<Profile2Black width={36} height={36}/>}<Text className={activeTab==='profile'?'text-rose-800 font-medium text-center text-sm':'text-gray-600 text-center font-medium text-sm'}>Profile</Text></TouchableOpacity>
-            <TouchableOpacity className={activeTab==='orders'?'bg-rose-100 p-2 rounded-3xl w-[21%] items-center':'p2 w-[21%] items-center'} onPress={() => setActiveTab('orders')}>{activeTab==='orders'?<OrdersRed width={36} height={36} />:<OrdersBlack width={36} height={36}/>}<Text className={activeTab==='orders'?'text-rose-800 font-medium text-center text-sm':'text-gray-600 text-center font-medium text-sm'}>Orders</Text></TouchableOpacity>
-            {/* <TouchableOpacity className='bg-rose-100 p-2 rounded-3xl w-[21%]' onPress={() => setActiveTab('orders')}><Text className='text-rose-800 font-medium text-center'>Orders</Text></TouchableOpacity> */}
+            <TouchableOpacity className={activeTab==='profile'?'bg-rose-100 p-2 rounded-3xl w-[21%] items-center':'p2 w-[21%] items-center'} onPress={() => setActiveTab('profile')}>{activeTab==='profile'?<Profile2 width={36} height={26} />:<Profile2Black width={36} height={26}/>}<Text className={activeTab==='profile'?'text-rose-800 font-medium text-center text-xs':'text-gray-600 text-center font-medium text-xs'}>Profile</Text></TouchableOpacity>
 
-              <TouchableOpacity className={activeTab==='help'?'bg-rose-100 p-2 rounded-3xl w-[21%] items-center':'p2 w-[21%] items-center'} onPress={() => setActiveTab('help')}>{activeTab==='help'?<HelpRed width={36} height={36} />:<HelpBlack width={36} height={36}/>}<Text className={activeTab==='help'?'text-rose-800 font-medium text-center text-sm':'text-gray-600 text-center font-medium text-sm'}>Help</Text></TouchableOpacity>
-              {/* <TouchableOpacity className='bg-rose-100 p-2 rounded-3xl w-[21%]' onPress={() => setActiveTab('help')}><Text className='text-rose-800 font-medium text-center'>Help</Text></TouchableOpacity> */}
+            <TouchableOpacity className={activeTab==='orders'?'bg-rose-100 p-2 rounded-3xl w-[21%] items-center':'p2 w-[21%] items-center'} onPress={() => setActiveTab('orders')}>{activeTab==='orders'?<OrdersRed width={36} height={26} />:<OrdersBlack width={36} height={26}/>}<Text className={activeTab==='orders'?'text-rose-800 font-medium text-center text-xs':'text-gray-600 text-center font-medium text-xs'}>Orders</Text></TouchableOpacity>
 
-              <TouchableOpacity className={activeTab==='contact'?'bg-rose-100 p-2 rounded-3xl w-[21%] items-center':'p2 w-[21%] items-center'} onPress={() => setActiveTab('contact')}>{activeTab==='contact'?<ContactRed width={36} height={36} />:<ContactBlack width={36} height={36}/>}<Text className={activeTab==='contact'?'text-rose-800 font-medium text-center text-sm':'text-gray-600 text-center font-medium text-sm'}>Contact</Text></TouchableOpacity>
-            {/* <Button title="Rest" onPress={() => setActiveTab('Rest')} /> */}
+              <TouchableOpacity className={activeTab==='help'?'bg-rose-100 p-2 rounded-3xl w-[21%] items-center':'p2 w-[21%] items-center'} onPress={() => setActiveTab('help')}>{activeTab==='help'?<HelpRed width={36} height={26} />:<HelpBlack width={36} height={26}/>}<Text className={activeTab==='help'?'text-rose-800 font-medium text-center text-xs':'text-gray-600 text-center font-medium text-xs'}>Help</Text></TouchableOpacity>
+
+              <TouchableOpacity className={activeTab==='contact'?'bg-rose-100 p-2 rounded-3xl w-[21%] items-center':'p2 w-[21%] items-center'} onPress={() => setActiveTab('contact')}>{activeTab==='contact'?<ContactRed width={36} height={26} />:<ContactBlack width={36} height={26}/>}<Text className={activeTab==='contact'?'text-rose-800 font-medium text-center text-xs':'text-gray-600 text-center font-medium text-xs'}>Contact</Text></TouchableOpacity>
+
           </View>
         </>
       )}
