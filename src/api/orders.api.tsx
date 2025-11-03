@@ -5,12 +5,6 @@ type SalesforceRecord = {
   [key: string]: any;
 };
 
-// type SalesforceApiResponse = {
-//   records: SalesforceRecord[];
-//   totalSize: number;
-//   done: boolean;
-// };
-
 type userInfo = {
     name : string,
     email : string
@@ -22,8 +16,7 @@ const getAccountDetails = async(accessToken : string , userInfo : userInfo) =>{
     let soqlQuery : string = '';
     let accountInfo : SalesforceRecord = {Id :''};
 
-    soqlQuery = `SELECT Id, Name , Phone ,Primary_Contact__r.Name, Primary_Contact_Email__c, Mailing_Street__c , Mailing_City__c , Mailing_State__c , Mailing_ZIP__c , Mailing_Country__c FROM Account WHERE Primary_Contact_Email__c = '${userInfo?.email.replace(/'/g, "\\'")}' LIMIT 1`;
-    // soqlQuery = 'SELECT Id, Name FROM ACCOUNT  LIMIT 5';
+    soqlQuery = `SELECT Id, Name, Primary_Contact_Phone__c, Primary_Contact__r.Name, Primary_Contact_Email__c, Mailing_Street__c, Mailing_City__c, Mailing_State__c, Mailing_ZIP__c, Mailing_Country__c FROM Account WHERE Primary_Contact_Email__c = '${userInfo?.email.replace(/'/g, "\\'")}' LIMIT 1`;
 
     let accountResult : SalesforceRecord[] =  await querySalesforce(
         accessToken,
@@ -34,8 +27,6 @@ const getAccountDetails = async(accessToken : string , userInfo : userInfo) =>{
 
     if(accountResult.length > 0) accountInfo = accountResult[0];
 
-    console.log('accountInfo ab -> '+accountInfo);
-
     return accountInfo;
 }
 
@@ -45,28 +36,46 @@ const getAccountProducts = async(accessToken : string  , accountInfo : Salesforc
     let soqlQuery : string = '';
     let accountProducts : SalesforceRecord[] = [];
 
-    soqlQuery = `SELECT Id ,Name , FConnect__Customer__c , FConnect__Customer__r.Name , Short_Description__c , Site_Name__c , Account_Status__c FROM FConnect__Installed_Products__c WHERE FConnect__Customer__c  = '${accountInfo?.Id.replace(/'/g, "\\'")}'`;
+    soqlQuery = `SELECT Id, Name, FConnect__Customer__c, FConnect__Customer__r.Name, Short_Description__c, FConnect__Site__r.Name, Account_Status__c, Status_Indicator__c FROM FConnect__Installed_Products__c WHERE FConnect__Customer__c = '${accountInfo?.Id}'`;
     
-    console.log('ok 1 query : ',soqlQuery );
     accountProducts  = await querySalesforce(
         accessToken,
         soqlQuery
     )
-        console.log('ok 2')
 
     console.log('accountProducts -> '+accountProducts);
 
     return accountProducts;
+}
+
+//method for getting all Order of related to Account 
+const getAllAccountOrder = async(accessToken : string  , accountInfo : SalesforceRecord) =>{
+
+    let soqlQuery : string = '';
+    let productOrders : SalesforceRecord[] = [];
+
+    soqlQuery = `SELECT Id, (Select Id from FConnect__Required_Materials__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c, Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name
+     FROM FConnect__Service_Order__c WHERE FConnect__Account__c = '${accountInfo.Id}' AND Parent_Order__c = null`;
+
+    productOrders  =  await querySalesforce(
+        accessToken,
+        soqlQuery
+    )
+
+    console.log('productOrders -> '+productOrders);
+
+    return productOrders;
     
 }
 
-//method for getting particular Product Orders
+//method for getting particular Product's Orders
 const getProductOrders = async(accessToken : string  , productInfo : SalesforceRecord) =>{
 
     let soqlQuery : string = '';
     let productOrders : SalesforceRecord[] = [];
 
-    soqlQuery = `SELECT ID,Name, FConnect__Account__c ,FConnect__Account__r.Name FROM FConnect__Service_Order__c WHERE FConnect__Account__c  = '${productInfo.Id}' AND Parent_Order__c = null`;
+    soqlQuery = `SELECT SELECT Id,(Select Id from FConnect__Required_Materials__r) , Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c, Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c, FConnect__Account__r.Name
+     FROM FConnect__Service_Order__c WHERE FConnect__Account__c  = '${productInfo.Id}' AND Parent_Order__c = null`;
 
     productOrders  =  await querySalesforce(
         accessToken,
@@ -85,7 +94,8 @@ const getChildOrders = async(accessToken : string  , parentOrderInfo : Salesforc
     let soqlQuery : string = '';
     let childOrders : SalesforceRecord[] = [];
 
-    soqlQuery = `SELECT ID,Name, FConnect__Account__c ,FConnect__Account__r.Name FROM FConnect__Service_Order__c WHERE Parent_Order__c  = '${parentOrderInfo.Id}'`;
+    soqlQuery = `SELECT Id, (Select Id from FConnect__Required_Materials__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c, Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name
+     FROM FConnect__Service_Order__c WHERE Parent_Order__c  = '${parentOrderInfo.Id}'`;
 
     childOrders  =  await querySalesforce(
         accessToken,
@@ -104,18 +114,16 @@ const getOrderLineItems = async(accessToken : string  , childOrderInfo : Salesfo
     let soqlQuery : string = '';
     let orderLineItems : SalesforceRecord[] = [];
 
-    soqlQuery = `SELECT ID,Name, FConnect__Account__c ,FConnect__Account__r.Name  FROM FConnect__Service_Order__c WHERE FConnect__Account__c  = '${childOrderInfo.Id}'`;
+    soqlQuery = `SELECT Id, Name, Item_Description__c, FConnect__Quantity_Neeed__c, Discounted_Unit_Price__c, Extended_Total__c FROM FConnect__Required_Material__c WHERE FConnect__Service_Order__c =  '${childOrderInfo.Id}'`;
 
     orderLineItems  =  await querySalesforce(
         accessToken,
         soqlQuery
     )
 
-    console.log('accountProducts -> '+orderLineItems);
+    console.log('orderLineItems -> '+orderLineItems);
 
     return orderLineItems;
-    
 }
 
-
-export {getAccountDetails , getAccountProducts , getProductOrders , getChildOrders , getOrderLineItems}
+export {getAccountDetails , getAllAccountOrder, getAccountProducts , getProductOrders , getChildOrders , getOrderLineItems}
