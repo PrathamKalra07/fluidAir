@@ -8,7 +8,7 @@ import Orders from '../Orders';
 import Help from '../Help';
 import Contact from '../Contact';
 import { fetchUserSessionId } from '../../api/restUtils';
-import { getAccountDetails, getAccountProducts } from '../../api/orders.api';
+import { getAccountDetails, getAccountProducts, getAllAccountOrder } from '../../api/orders.api';
 import Profile2 from '../../assets/profile2.svg';
 import Profile2Black from '../../assets/profile2black.svg';
 import OrdersBlack from '../../assets/ordersBlack.svg';
@@ -23,11 +23,12 @@ export default function HomeScreen() {
   const [sessionId, setSessionId] = useState('');
   const [account, setAccount] = useState<Record<string, any> | null>(null);
   const [products, setProducts] = useState<Record<string, any>[] | null>(null);
+  const [orders,setOrders]= useState<Record<string,any>[] | null>();
   const [isLoading, setIsLoading] = useState(false);
 
   const userInfo = {
-    // email: 'aaron@plastechengineering.com',
-    email  : 'bmay@anchorabrasives.com',
+    email: 'aaron@plastechengineering.com',
+    // email  : 'bmay@anchorabrasives.com',
     name: 'Plas-Tech Engineering ',
   };
 
@@ -50,6 +51,10 @@ export default function HomeScreen() {
       setProducts(productsData);
       console.log('Products:', productsData);
 
+      const ordersData = await getAllAccountOrder(token,accountData);
+      setOrders(ordersData);
+      console.log('orders:',ordersData);
+
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -66,7 +71,7 @@ export default function HomeScreen() {
       case 'profile':
         return <Profile account={account} products={products} />;
       case 'orders':
-        return <Orders />;
+        return <Orders account={account} orders={orders}  />;
       case 'help':
         return <Help />;
       case 'contact':

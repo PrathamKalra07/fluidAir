@@ -49,12 +49,13 @@ const getAccountProducts = async(accessToken : string  , accountInfo : Salesforc
 }
 
 //method for getting all Order of related to Account 
-const getAllAccountOrder = async(accessToken : string  , accountInfo : SalesforceRecord) =>{
+const getAllAccountOrder = async(accessToken : string  , accountInfo : any) =>{
 
     let soqlQuery : string = '';
     let productOrders : SalesforceRecord[] = [];
 
-    soqlQuery = `SELECT Id, (Select Id from FConnect__Required_Materials__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c, Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name
+    soqlQuery = `SELECT Id, (Select Id from FConnect__Required_Materials__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,FConnect__Order_Status__c,
+Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name
      FROM FConnect__Service_Order__c WHERE FConnect__Account__c = '${accountInfo.Id}' AND Parent_Order__c = null`;
 
     productOrders  =  await querySalesforce(
@@ -89,7 +90,7 @@ const getProductOrders = async(accessToken : string  , productInfo : SalesforceR
 }
 
 //method for getting particular parent order's child Order
-const getChildOrders = async(accessToken : string  , parentOrderInfo : SalesforceRecord) =>{
+const getChildOrders = async(accessToken : string  , parentOrderInfo : any) =>{
 
     let soqlQuery : string = '';
     let childOrders : SalesforceRecord[] = [];

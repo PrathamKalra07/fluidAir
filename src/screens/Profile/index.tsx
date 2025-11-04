@@ -28,10 +28,11 @@ import PinRed from '../../assets/pinRed.svg';
 type ProfileProps = {
   account: Record<string, any> | null;
   // sessionId: string;
-  products : Record<string, any>[] | null;
+  products : Record<string, any>[];
 };
 
 export default function Profile({ account, products }: ProfileProps) {
+
   return (
     <ScrollView className="">
       {/* <Text className="font-extrabold text-green-200">Welcome Profile!</Text> */}
