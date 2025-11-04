@@ -103,7 +103,7 @@ export default function Orders({account,orders}:accountOrders) {
   },[]);
 
   return (
-    <View className='pt-[120]'>
+    <View>
       <View className="w-[85%] mx-auto mt-8 flex-row justify-between items-center">
         <Text className="text-2xl font-medium">Your Orders</Text>
         <View className="w-[50%] z-50">

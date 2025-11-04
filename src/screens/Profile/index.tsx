@@ -34,14 +34,7 @@ type ProfileProps = {
 export default function Profile({ account, products }: ProfileProps) {
 
   return (
-    <ScrollView 
-          contentContainerStyle={{
-        paddingTop: 120,   // push content below your top navbar
-        paddingBottom: 90, // leave space for bottom navbar
-        alignItems: 'center',
-      }}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView className="">
       {/* <Text className="font-extrabold text-green-200">Welcome Profile!</Text> */}
 
       <View className=" w-[80%] mx-auto px-2 py-5 border-gray-400 border rounded-xl overflow-visible mt-5">

@@ -1,5 +1,7 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Easing } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import Home from '../screens/Home';
 import Orders from '../screens/Orders';
 import Contact from '../screens/Contact';
@@ -11,28 +13,40 @@ import Splash from '../screens/Splash';
 import Rest from '../screens/Rest';
 import OrderDetails from '../screens/OrderDetails';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
-type AllData = {
-  account: Record<string, any> | null;
-  orders: Record<string, any>[] | null;
-  products: Record<string, any>[];
-  sessionId: string | null;
-};
-
-export default function StackNavigator({ account, orders, products, sessionId }: AllData) {
+export default function StackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Splash"
+    initialRouteName='Splash'
       screenOptions={{
         headerShown: false,
-
-        // ⚡ Native transitions (super smooth)
-        animation: 'slide_from_right',
-        animationDuration: 100, // keep short and snappy
-        gestureEnabled: true,
-        fullScreenGestureEnabled: true,
-        detachPreviousScreen: false,
+        transitionSpec: {
+          open: {
+            animation: 'timing',
+            config: { duration: 200, easing: Easing.out(Easing.exp) },
+          },
+          close: {
+            animation: 'timing',
+            config: { duration: 200, easing: Easing.in(Easing.ease) },
+          },
+        },
+        cardStyleInterpolator: ({ current, layouts }) => ({
+          cardStyle: {
+            transform: [
+              {
+                translateX: current.progress.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [layouts.screen.width, 0],
+                }),
+              },
+            ],
+            opacity: current.progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 1],
+            }),
+          },
+        }),
       }}
     >
       <Stack.Screen name="Splash" component={Splash} />
@@ -40,18 +54,12 @@ export default function StackNavigator({ account, orders, products, sessionId }:
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Rest" component={Rest} />
-      <Stack.Screen name="OrderDetail" component={OrderDetails} />
+      <Stack.Screen name="Order" component={OrderDetails}/>
 
-      <Stack.Screen name="Profile">
-        {(props) => <Profile {...props} account={account} products={products} />}
-      </Stack.Screen>
-
-      <Stack.Screen name="Orders">
-        {(props) => <Orders {...props} account={account} orders={orders} />}
-      </Stack.Screen>
-
-      <Stack.Screen name="Help" component={Help} />
-      <Stack.Screen name="Contact" component={Contact} />
+      {/* <Stack.Screen name="Orders" component={Orders} /> */}
+      {/* <Stack.Screen name="Contact" component={Contact} /> */}
+      {/* <Stack.Screen name="Help" component={Help} /> */}
+      {/* <Stack.Screen name="Profile" component={Profile} /> */}
     </Stack.Navigator>
   );
 }

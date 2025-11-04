@@ -8,7 +8,7 @@ export default function Contact() {
   const navigation = useNavigation();
 
   return (
-    <View className="flex-1 p-6 gap-4">
+    <View className="flex p-6 gap-4">
       <Text className="text-xl text-semibold">Contact Us</Text>
 
       <View className="bg-white rounded-xl p-6 flex gap-10 shadow-lg">
