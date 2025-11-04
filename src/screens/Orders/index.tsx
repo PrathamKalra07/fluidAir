@@ -163,7 +163,9 @@ export default function Orders({account,orders}:accountOrders) {
       }}>
 
         {orders?.map((order,index)=>(
-          <TouchableOpacity key={index}>
+        <TouchableOpacity key={index} onPress={() =>
+            navigation.navigate('Order',{order})
+        }>
 
           <View  className='p-4 border border-gray-400 rounded-xl mt-6'>
             <View className={getOrderStatusCss(order.FConnect__Order_Status__c,'view')}>

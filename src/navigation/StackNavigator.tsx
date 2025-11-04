@@ -11,6 +11,7 @@ import Profile from '../screens/Profile';
 import Signup from '../screens/Signup';
 import Splash from '../screens/Splash';
 import Rest from '../screens/Rest';
+import OrderDetails from '../screens/OrderDetails';
 
 const Stack = createStackNavigator();
 
@@ -53,6 +54,7 @@ export default function StackNavigator() {
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Rest" component={Rest} />
+      <Stack.Screen name="Order" component={OrderDetails}/>
 
       {/* <Stack.Screen name="Orders" component={Orders} /> */}
       {/* <Stack.Screen name="Contact" component={Contact} /> */}
