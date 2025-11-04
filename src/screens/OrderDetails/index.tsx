@@ -11,7 +11,13 @@ export default function OrderDetails() {
   const { order } = route.params;
 
   return (
-    <ScrollView className="p-4">
+    <ScrollView className="p-4"
+    contentContainerStyle={{
+        paddingTop: 120,   // push content below your top navbar
+        paddingBottom: 90, // leave space for bottom navbar
+        alignItems: 'center',
+      }}
+    >
       <Text className="text-2xl font-semibold">{order.Name}</Text>
       <Text className="text-gray-500 mb-4">{order.FConnect__Order_Status__c}</Text>
 

@@ -50,7 +50,7 @@ export default function Login() {
 
       <Text className='text-rose-800 text-right my-4'>Forgot Password?</Text>
 
-      <TouchableOpacity className='mx-auto bg-rose-900 p-3 rounded-xl w-full' onPress={()=>navigation.navigate('Home')}><Text className='text-white text-center'>Sign In</Text></TouchableOpacity>
+      <TouchableOpacity className='mx-auto bg-rose-900 p-3 rounded-xl w-full' onPress={()=>navigation.navigate('Profile')}><Text className='text-white text-center'>Sign In</Text></TouchableOpacity>
 
       <Text className='text-center my-4'>Or</Text>
 
