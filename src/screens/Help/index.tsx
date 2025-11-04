@@ -7,8 +7,10 @@ export default function Help() {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <View >
+      <View>
 
+      </View>
     </View>
   );
 }
