@@ -11,7 +11,7 @@ export default function Contact() {
     <View className="flex p-6 gap-4">
       <Text className="text-xl text-semibold">Contact Us</Text>
 
-      <View className="bg-white rounded-xl p-6 flex gap-10 shadow-lg">
+      <View className="bg-white rounded-2xl p-6 flex gap-10 shadow-lg">
         <View className="flex gap-2">
           <Text className="text-semibold text-xl text-[#101828]">Get in Touch</Text>
           <Text className=" text-lg text-[#4A5565]">

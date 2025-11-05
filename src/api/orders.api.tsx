@@ -1,4 +1,5 @@
 import { querySalesforce} from './restUtils'
+import axios from 'axios';
 
 type SalesforceRecord = {
   Id: string;
@@ -8,6 +9,28 @@ type SalesforceRecord = {
 type userInfo = {
     name : string,
     email : string
+}
+
+
+//method for getting FConnect__Order_Status__c's picklist values
+const getStatusPicklistValue = async(accessToken : string) => {
+
+    let endpoint : string = 'https://dg0000000kpsxmay.my.salesforce.com/services/data/v65.0/ui-api/object-info/FConnect__Service_Order__c/picklist-values/012000000000000AAA/FConnect__Order_Status__c'
+
+    return axios
+    .get<any>(endpoint, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.data.values)
+    .catch(error => {
+      const message = error.response
+        ? `Salesforce query failed: ${error.response.status} ${error.response.statusText}`
+        : error.message;
+      return Promise.reject(new Error(message));
+    });
 }
 
 //method for getting Account's Products
@@ -127,4 +150,4 @@ const getOrderLineItems = async(accessToken : string  , childOrderInfo : Salesfo
     return orderLineItems;
 }
 
-export {getAccountDetails , getAllAccountOrder, getAccountProducts , getProductOrders , getChildOrders , getOrderLineItems}
+export {getStatusPicklistValue , getAccountDetails , getAllAccountOrder, getAccountProducts , getProductOrders , getChildOrders , getOrderLineItems}
