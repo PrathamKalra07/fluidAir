@@ -83,9 +83,9 @@ export default function HomeScreen() {
       case 'contact':
         return <Contact />;
       case 'orderDetail':
-        return <OrderDetails order={orderDetail} backToOrder={backToOrder} />
+        return <OrderDetails order={orderDetail}  backToOrder={backToOrder} openOrderLineItems={openOrderLineItems} />
       case 'orderLinkItems':
-        return <OrderLineItems items={} backToDetails={backToDetails} />
+        return <OrderLineItems order={orderItems} backToDetails={backToDetails} />
       default:
         return <Profile account={account} products={products} />;
     }
@@ -99,6 +99,10 @@ export default function HomeScreen() {
 
   }
 
+  const openOrderLineItems = (orderDetailItems) =>{
+    setOrderItems(orderDetailItems);
+    setActiveTab('orderLineItems');
+  }
 
   const openOrderDetails = (order)=>{
     setOrderDetail(order);
