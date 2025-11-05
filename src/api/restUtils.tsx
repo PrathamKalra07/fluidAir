@@ -94,7 +94,7 @@ const querySalesforce = async (
 ): Promise<SalesforceRecord[]> => {
   
   soqlQuery = encodeURIComponent(soqlQuery).replace(/%20/g, '+');
-  const queryEndpoint = `${process.env.REST_BASE_URL}/services/data/v56.0/query?q=${soqlQuery}`;
+  const queryEndpoint = `${process.env.REST_BASE_URL}/services/data/v59.0/query?q=${soqlQuery}`;
   
   console.log('queryEndpoint ->> '+queryEndpoint)
   console.log('soqlQuery ->> '+soqlQuery)
@@ -109,6 +109,7 @@ const querySalesforce = async (
     })
     .then(response => response.data.records)
     .catch(error => {
+      console.log('error -? '+error)
       const message = error.response
         ? `Salesforce query failed: ${error.response.status} ${error.response.statusText}`
         : error.message;

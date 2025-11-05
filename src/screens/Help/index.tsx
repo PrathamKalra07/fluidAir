@@ -12,9 +12,7 @@ export default function Help() {
 
      <View className="p-6 gap-4">
         <Text className="text-xl text-semibold">Help & Support</Text>
-        <ScrollView className='' contentContainerStyle={{
-          paddingBottom:100
-        }}>
+        <ScrollView className='pb-10'>
 
         <View className="gap-4 flex flex-col">
           <View className="rounded-2xl flex gap-3 shadow bg-white p-5">
@@ -38,7 +36,7 @@ export default function Help() {
             <Text className="text-lg text-semibold text-[#4A5565]">Manage your account</Text>
           </View>
         </View>
-        
+
         </ScrollView>
     </View>
   );
