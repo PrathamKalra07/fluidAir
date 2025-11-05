@@ -17,13 +17,15 @@ import HelpRed from '../../assets/helpRed.svg';
 import HelpBlack from '../../assets/helpBlack.svg';
 import ContactRed from '../../assets/contactRed.svg';
 import ContactBlack from '../../assets/contactBlack.svg';
+import OrderDetails from '../OrderDetails';
 
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState('profile');
   const [sessionId, setSessionId] = useState('');
   const [account, setAccount] = useState<Record<string, any> | null>(null);
-  const [products, setProducts] = useState<Record<string, any>[] | null>(null);
-  const [orders,setOrders]= useState<Record<string,any>[] | null>();
+  const [products, setProducts] = useState<Record<string, any>[]>([]);
+  const [orders,setOrders]= useState<Record<string,any>[]>([]);
+  const [orderDetail,setOrderDetail]= useState<Record<string,any> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const userInfo = {
@@ -71,15 +73,23 @@ export default function HomeScreen() {
       case 'profile':
         return <Profile account={account} products={products} />;
       case 'orders':
-        return <Orders account={account} orders={orders}  />;
+        return <Orders account={account} orders={orders} openOrderDetails={openOrderDetails} />;
       case 'help':
         return <Help />;
       case 'contact':
         return <Contact />;
+      case 'orderDetail':
+        return <OrderDetails order={orderDetail} />
       default:
         return <Profile account={account} products={products} />;
     }
   };
+
+
+  const openOrderDetails = (order)=>{
+    setOrderDetail(order);
+    setActiveTab('orderDetail');
+  }
 
   return (
     <View style={styles.container}>

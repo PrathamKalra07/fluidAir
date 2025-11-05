@@ -26,9 +26,10 @@ const FilterButton = ({
 type accountOrders={
   account:Record<string,any> | null;
   orders: Record<string,any>[] | null;
+  openOrderDetails : Function;
 }
 
-export default function Orders({account,orders}:accountOrders) {
+export default function Orders({account,orders,openOrderDetails}:accountOrders) {
   const navigation = useNavigation();
   const [filter, setFilter] = useState('all');
 
@@ -103,7 +104,7 @@ export default function Orders({account,orders}:accountOrders) {
   },[]);
 
   return (
-    <View>
+    <View > 
       <View className="w-[85%] mx-auto mt-8 flex-row justify-between items-center">
         <Text className="text-2xl font-medium">Your Orders</Text>
         <View className="w-[50%] z-50">
@@ -164,7 +165,7 @@ export default function Orders({account,orders}:accountOrders) {
 
         {orders?.map((order,index)=>(
         <TouchableOpacity key={index} onPress={() =>
-            navigation.navigate('Order',{order})
+            openOrderDetails(order)
         }>
 
           <View  className='p-4 border border-gray-400 rounded-xl mt-6'>
