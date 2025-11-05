@@ -98,11 +98,11 @@ export default function OrderDetails({order,backToOrder,openOrderLineItems}:Orde
             <View className='flex-1 flex-row justify-between pr-2'>
               <View className='p-2'>
                 <Text className='text-gray-500'>Site</Text>
-                <Text className='font-medium'></Text>
+                <Text className='font-medium'>{child.FConnect__Site_Name__r.Name}</Text>
               </View>
               <View className='flex-1 flex-row justify-end items-end pb-2'>
                 {/* <Text className='text-gray-500'>Site</Text> */}
-                <Text className='font-medium'>{}</Text>
+                <Text className='font-medium text-red-700'>{child.FConnect__Required_Materials__r?.totalSize && child.FConnect__Required_Materials__r.totalSize > 0 ? child.FConnect__Required_Materials__r.totalSize : 0 } Items</Text>
               </View>
             </View>
           {/* ))} */}
