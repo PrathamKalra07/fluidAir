@@ -1,22 +1,25 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Touchable,TouchableOpacity } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import GtRed from '../../assets/gtRed.svg'
+import { TouchableWithoutFeedback } from 'react-native';
 
 type OrderDetails = {
   order: Record<string, any> | null;
+  backToOrder: Function
 };
 
-export default function OrderDetails({order}:OrderDetails) {
+export default function OrderDetails({order,backToOrder,openOrderLineItems}:OrderDetails) {
   // const route = useRoute<RouteProp<{ params: OrderDetailsRouteParams }, 'params'>>();
   // const { order } = route.params;
 
   return (
     <ScrollView className="p-4">
-      <View className='mb-4'>
-      <Text className='text-red-700 font-medium text-lg'>&lt; Back to Orders</Text>
-      </View>
+      <TouchableWithoutFeedback className='mb-4' onPress={()=>backToOrder()}>
+      <Text className='text-red-700 font-medium text-lg mb-2'>&lt; Back to Orders</Text>
+      </TouchableWithoutFeedback>
 
-      <View className='border border-gray-300 rounded-3xl p-4'>
+      <View className='border border-gray-300 rounded-xl p-4'>
           <View className='flex-1 flex-row justify-between my-1'>
           <View className='flex-1 flex-row'>
             <Text className='text-gray-500'>Order ID : </Text>
@@ -50,19 +53,51 @@ export default function OrderDetails({order}:OrderDetails) {
       
       </View>
 
+      <View className='flex-1 flex-row px-2 justify-between my-4'>
+      <Text className='text-xl font-medium'>Child Orders</Text>
+      <Text className='text-lg text-gray-500'>2 Orders</Text>
+      </View>
       {/* Render child orders if present */}
-      {order?.ChildOrders__r?.length ? (
-        <View className="bg-white rounded-xl p-4 border border-gray-300">
-          <Text className="text-lg font-semibold mb-2">Child Orders</Text>
-          {order.ChildOrders__r.map((child, index) => (
-            <View key={index} className="p-2 border-b border-gray-200">
-              <Text className="font-medium">{child.Name}</Text>
-              <Text className="text-gray-600">{child.FConnect__Order_Status__c}</Text>
+      {order ? (
+        <TouchableOpacity className="bg-white rounded-xl p-4 border border-gray-300 pr-16">
+          {/* <Text className="text-lg font-semibold mb-2">Child Orders</Text> */}
+          {/* {order.ChildOrders__r.map((child, index) => ( */}
+            {/* <Text className='text-4'>&gt;</Text> */}
+            <View className='absolute top-[62] right-2 flex-1 flex-col items-center justify-center]'>
+
+            <GtRed height={32} width={32} />
             </View>
-          ))}
-        </View>
+            <View className="p-2 flex-1 flex-row justify-between">
+              <Text className="font-medium">CO-001-A</Text>
+              <Text className="font-bold mr-1">$3,586.00</Text>
+            </View>
+            <View className="p-2 flex-1 flex-row justify-between">
+              <View className='flex-1'>
+                <Text className='text-gray-500'>
+                  Approved Date:
+                </Text>
+                <Text className="font-medium">Oct 20, 2025</Text>
+              </View>
+              <View className='flex-1 flex-row items-center justify-end'>
+                <Text className='text-3xl'> • </Text>
+                <Text>Delivered</Text>
+              </View>
+              
+            </View>
+            <View className='flex-1 flex-row justify-between pr-2'>
+              <View className='p-2'>
+                <Text className='text-gray-500'>Site</Text>
+                <Text className='font-medium'>Manufacturing Plant A</Text>
+              </View>
+              <View className='flex-1 flex-row justify-end items-end pb-2'>
+                {/* <Text className='text-gray-500'>Site</Text> */}
+                <Text className='font-medium'>2 Items</Text>
+              </View>
+            </View>
+          {/* ))} */}
+        </TouchableOpacity>
       ) : (
-        <Text className="text-gray-400 italic">No child orders</Text>
+        <Text className="text-gray-400 italic p-4">No child orders</Text>
       )}
     </ScrollView>
   );

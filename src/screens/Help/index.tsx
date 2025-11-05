@@ -10,7 +10,7 @@ export default function Help() {
 
   return (
 
-     <View className="p-6 gap-4">
+     <View className="p-4 gap-4">
         <Text className="text-xl text-semibold">Help & Support</Text>
         <ScrollView className='' contentContainerStyle={{
           paddingBottom:100

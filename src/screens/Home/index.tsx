@@ -8,7 +8,7 @@ import Orders from '../Orders';
 import Help from '../Help';
 import Contact from '../Contact';
 import { fetchUserSessionId } from '../../api/restUtils';
-import { getAccountDetails, getAccountProducts, getAllAccountOrder } from '../../api/orders.api';
+import { getAccountDetails, getAccountProducts, getAllAccountOrder, getChildOrders } from '../../api/orders.api';
 import Profile2 from '../../assets/profile2.svg';
 import Profile2Black from '../../assets/profile2black.svg';
 import OrdersBlack from '../../assets/ordersBlack.svg';
@@ -18,6 +18,7 @@ import HelpBlack from '../../assets/helpBlack.svg';
 import ContactRed from '../../assets/contactRed.svg';
 import ContactBlack from '../../assets/contactBlack.svg';
 import OrderDetails from '../OrderDetails';
+import OrderLineItems from '../OrderLineItems';
 
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState('profile');
@@ -26,6 +27,7 @@ export default function HomeScreen() {
   const [products, setProducts] = useState<Record<string, any>[]>([]);
   const [orders,setOrders]= useState<Record<string,any>[]>([]);
   const [orderDetail,setOrderDetail]= useState<Record<string,any> | null>(null);
+  const [orderItems,setOrderItems] = useState<Record<string,any>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const userInfo = {
@@ -57,6 +59,8 @@ export default function HomeScreen() {
       setOrders(ordersData);
       console.log('orders:',ordersData);
 
+      // const childOrders = await getChildOrders(token,)
+
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -79,16 +83,35 @@ export default function HomeScreen() {
       case 'contact':
         return <Contact />;
       case 'orderDetail':
-        return <OrderDetails order={orderDetail} />
+        return <OrderDetails order={orderDetail} backToOrder={backToOrder} />
+      case 'orderLinkItems':
+        return <OrderLineItems items={} backToDetails={backToDetails} />
       default:
         return <Profile account={account} products={products} />;
     }
   };
 
+  const getOrderItems = () =>{
+
+  }
+
+  const getOrderChild = () =>{
+
+  }
+
 
   const openOrderDetails = (order)=>{
     setOrderDetail(order);
     setActiveTab('orderDetail');
+  }
+
+  const backToOrder = () =>{
+    setOrderDetail(null);
+    setActiveTab('orders');
+  }
+
+  const backToDetails = () =>{
+    setActiveTab('orderDetail')
   }
 
   return (
