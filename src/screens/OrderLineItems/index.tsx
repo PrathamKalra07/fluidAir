@@ -11,7 +11,7 @@ export default function OrderLineItems({items,backToDetails}:orderLine) {
 
     return(
         <>
-            
+            <View><Text>Order Line ITEmS</Text></View>
         </>
     );
 }

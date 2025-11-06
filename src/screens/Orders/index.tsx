@@ -15,8 +15,8 @@ const FilterButton = ({
 }) => (
   <TouchableOpacity
     onPress={onPress}
-    className={`border px-4 py-2 border-gray-400 rounded-xl ${
-      active ? 'bg-[#AD033B]' : ''
+    className={`border px-4 py-2 border-gray-400 rounded-3xl  ${
+      active ? 'bg-[#AD033B]' : 'bg-white'
     }`}
   >
     <Text className={active ? 'text-white' : 'text-black'}>{label}</Text>
@@ -30,17 +30,14 @@ type accountOrders={
 }
 
 export default function Orders({account,orders,openOrderDetails}:accountOrders) {
+
   const navigation = useNavigation();
   const [filter, setFilter] = useState('all');
 
-  
   const getOrders = (filter) =>{
-    
     const allOrders = orders;
     console.log('all orders : ',allOrders);
     return allOrders;
-
-
   }
 
   const getOrderStatusCss=(status:string,element:string)=>{
@@ -123,7 +120,7 @@ export default function Orders({account,orders,openOrderDetails}:accountOrders) 
           height:76
         }}
       >
-        <TouchableOpacity className="border p-2 border-gray-400 rounded-xl">
+        <TouchableOpacity className="border p-2 border-gray-400 rounded-xl bg-white">
           <Filters height={18} width={18} />
         </TouchableOpacity>
 
@@ -163,7 +160,7 @@ export default function Orders({account,orders,openOrderDetails}:accountOrders) 
         paddingBottom:350
       }}>
 
-        {orders?.map((order,index)=>(
+      {orders?.map((order,index)=>(
         <TouchableOpacity key={index} onPress={() =>
             openOrderDetails(order)
         }>
@@ -201,7 +198,7 @@ export default function Orders({account,orders,openOrderDetails}:accountOrders) 
         </View> 
           </TouchableOpacity>
         )
-        )}
+      )}
         
 
         
