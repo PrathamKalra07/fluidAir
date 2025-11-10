@@ -26,7 +26,6 @@ export default function HomeScreen() {
 
   const hasFetchedRef = useRef(false);
 
-  // Load initial account + product data
   useEffect(() => {
     if (!hasFetchedRef.current) {
       hasFetchedRef.current = true;
@@ -39,7 +38,6 @@ export default function HomeScreen() {
     }
   }, [dispatch]);
 
-  // Handle Android back press
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -51,12 +49,10 @@ export default function HomeScreen() {
     }, [])
   );
 
-  // 🔹 Async tab loading simulation
   useEffect(() => {
     if (!loadedTabs.includes(activeTab)) {
       setTabLoading(true);
 
-      // Simulate async loading delay (you can replace with API calls if per-tab)
       setTimeout(() => {
         setLoadedTabs((prev) => [...prev, activeTab]);
         setTabLoading(false);
@@ -64,7 +60,6 @@ export default function HomeScreen() {
     }
   }, [activeTab]);
 
-  // 🔹 Render tab content conditionally
   const renderScreen = () => {
     if (tabLoading) {
       return (

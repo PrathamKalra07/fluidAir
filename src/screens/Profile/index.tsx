@@ -1,5 +1,5 @@
 // import "../../../globals.css";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native';
 import ProfileLogo from '../../assets/profileLogo.svg';
 import { styles } from './styles';
@@ -7,16 +7,40 @@ import { getAccountDetails } from '../../api/orders.api';
 import PinRed from '../../assets/pinRed.svg';
 import { RootState } from '../../store/store';
 import { shallowEqual, useSelector } from 'react-redux';
-// import { MapPin } from 'lucide-react-native';
+import SettingsWhite from '../../assets/settingsWhite.svg';
+import { RequestService } from '../../components/RequestService';
 
 export default function Profile() {
   const account = useSelector((state: RootState) => state.account.account, shallowEqual);
   const products = useSelector((state: RootState) => state.account.products, shallowEqual);
 
+  const [selectedProducts,setSelectedProducts]=useState<Record<string,any>[]>([]);
+  const [RequestServiceVisible,setRequestServiceVisible] = useState(false);
+  
+
+  const selectProducts = (product:Record<string,any>) =>{
+    let updatedSelection = [...selectedProducts];
+    const index = updatedSelection.findIndex((p) => p.Id === product.Id);
+    if (index > -1) {
+      // Product already selected, remove it
+      updatedSelection.splice(index, 1);
+    } else {
+      // Product not selected, add it
+      updatedSelection.push(product);
+    }
+    setSelectedProducts(updatedSelection);
+
+    console.log('Selected Products : ',updatedSelection);
+
+  }
+
+
   if (!account) return <Text>Loading account...</Text>;
 
   return (
-    <ScrollView className=" flex flex-col p-8 gap-8">
+    <>
+    <ScrollView className=" flex flex-col p-8 gap-8"
+    contentContainerClassName='pb-2'>
       {/* <Text className="font-extrabold text-green-200">Welcome Profile!</Text> */}
 
       <View className="shadow-xl bg-white rounded-2xl overflow-visible p-8 gap-4">
@@ -63,7 +87,7 @@ export default function Profile() {
       {products != null && products.length > 0 && (
         <View className="px-2 py-4 flex flex-row justify-between items-center">
           <Text className="font-regular text-xl text-[#101828]">Installed Products</Text>
-          <TouchableOpacity className="border border-red-800 p-2 rounded-xl">
+          <TouchableOpacity onPress={()=>setRequestServiceVisible(true)} className="border border-red-800 p-2 rounded-xl">
             <Text className='text-red-800'>
               + Add New Product
             </Text>
@@ -74,9 +98,10 @@ export default function Profile() {
       <View className="flex flex-col gap-4 mb-12">
         {products != null && products.length > 0 ? (
           products?.map((product, index) => (
-            <View
+            <TouchableOpacity
               key={index}
-              className="border border-gray-300 rounded-xl py-2 px-4 bg-white"
+              className={selectedProducts.includes(product)?"border border-red-700 py-2 px-4 bg-white rounded-xl":"border border-gray-300 rounded-xl py-2 px-4 bg-white"}
+              onPress={() => selectProducts(product)}
             >
               <View className="flex flex-row justify-between items-center">
                 <Text className="text-lg font-medium my-1">{product.Name}</Text>
@@ -105,7 +130,7 @@ export default function Profile() {
                   {product.FConnect__Site__r.Name || 'Unknown location'}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         ) : (
           <View>
@@ -155,5 +180,16 @@ export default function Profile() {
         )}
       </View>
     </ScrollView>
+        
+        <View className='fixed px-8 bottom-2'>
+          <TouchableOpacity className={selectedProducts.length>0?'bg-[#80062e] py-4 rounded-xl flex flex-row justify-center gap-2 align-middle items-center':'bg-[#975c70] py-4 rounded-xl flex flex-row justify-center gap-2 align-middle items-center'} disabled={selectedProducts.length > 0 ? false : true } ><SettingsWhite /><Text className='text-white text-center'>Request Service</Text></TouchableOpacity>
+        </View>
+  
+        {RequestServiceVisible &&
+        <View className='absolute inset-0 justify-center items-center bg-black/20 z-50'>
+          <RequestService setRequestServiceVisible={setRequestServiceVisible} />
+        </View>
+          }
+        </>
   );
 }

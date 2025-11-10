@@ -1,8 +1,7 @@
-// src/store/slices/accountSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUserSessionId } from '../../api/restUtils';
 import { getAccountDetails, getAccountProducts } from '../../api/orders.api';
-import { fetchOrders } from './ordersSlice'; // 👈 import this
+import { fetchOrders } from './ordersSlice'; 
 
 type AccountState = {
   account: Record<string, any> | null;
@@ -26,11 +25,9 @@ export const fetchAccountData = createAsyncThunk(
     try {
       const sessionRes = await fetchUserSessionId();
       const token = sessionRes.data;
-
       const accountData = await getAccountDetails(token, userInfo);
       const productsData = await getAccountProducts(token, accountData);
 
-      // ✅ Automatically trigger orders fetch once account is loaded
       dispatch(fetchOrders({ token, account: accountData }));
 
       return { account: accountData, products: productsData, sessionId: token };
@@ -54,7 +51,7 @@ const accountSlice = createSlice({
         state.loading = false;
         state.account = action.payload.account;
         state.products = action.payload.products;
-        state.sessionId = action.payload.sessionId; // 👈 store sessionId
+        state.sessionId = action.payload.sessionId;
       })
       .addCase(fetchAccountData.rejected, (state, action) => {
         state.loading = false;
