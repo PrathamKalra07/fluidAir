@@ -15,16 +15,26 @@ import {
 } from 'react-native-safe-area-context';
 import "./global.css";
 import AppNavigator from './src/navigation/AppNavigator';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { store } from './src/store/store';
+import { NavigationProvider } from './src/context/NavigationContext';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
+      <Provider store={store}>
+        <NavigationProvider>
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       {/* <AppContent /> */}
+
       <AppNavigator />;
     </SafeAreaProvider>
+
+        </NavigationProvider>
+      </Provider>
   );
 }
 

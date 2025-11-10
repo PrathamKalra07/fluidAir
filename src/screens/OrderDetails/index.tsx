@@ -11,21 +11,23 @@ import OrderLineItems from '../OrderLineItems';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import GtRed from '../../assets/gtRed.svg';
 import { TouchableWithoutFeedback } from 'react-native';
+import NavigationBar from '../../components/NavigationBar';
 
 type OrderDetails = {
   order: Record<string, any> | null;
-  backToOrder: Function;
-  openOrderLineItems: Function;
+  account: Record<string, any> | null;
+  // backToOrder: Function;
+  // openOrderLineItems: Function;
 };
 
-export default function OrderDetails({
-  order,
-  backToOrder,
-  openOrderLineItems,
-}: OrderDetails) {
+export default function OrderDetails() {
 
 
    const navigation = useNavigation();
+
+   const route = useRoute();
+
+   const { order,account}: OrderDetails = route.params as OrderDetails;
 
   // const route = useRoute<RouteProp<{ params: OrderDetailsRouteParams }, 'params'>>();
   // const { order } = route.params;
@@ -36,11 +38,13 @@ export default function OrderDetails({
   }, []);
 
   return (
-    <ScrollView className=""> 
+    <>
+    <NavigationBar account={account} />
+    <ScrollView contentContainerClassName='pt-[120]'> 
 
       <View className='p-4 flex flex-col gap-4'>
 
-        <TouchableWithoutFeedback className="" onPress={() => backToOrder()}>
+        <TouchableWithoutFeedback className="" onPress={() => navigation.goBack()}>
           <View className='flex flex-row items-center gap-2'>
               <GtRed height={20} width={20} style={{ transform: [{ rotate: '180deg' }] }}  />
               <Text className="text-red-700 font-medium text-lg ">
@@ -97,7 +101,7 @@ export default function OrderDetails({
 
         <View className="flex-1 flex-row px-2 justify-between">
           <Text className="text-xl font-medium">Child Orders</Text>
-          <Text className="text-lg text-gray-500">2 Orders</Text>
+          <Text className="text-lg text-gray-500">{order?.Orders__r?.totalSize | 0} Orders</Text>
         </View>
 
         <View className='flex flex-col gap-4'>  
@@ -108,9 +112,12 @@ export default function OrderDetails({
             order?.Orders__r.records.map((child, index) => (
               <TouchableOpacity
                 key={index}
-                className="bg-white rounded-xl p-4 border border-gray-300 flex flex-row"
+                className="bg-white shadow-xl rounded-xl p-4 border border-gray-300 flex flex-row"
                 // onPress={() => openOrderLineItems(child.FConnect__Required_Materials__r)}
-                onPress={() => navigation.navigate('OrderLineItems')}
+                onPress={() => navigation.navigate('OrdersStack',{
+                  screen: 'OrderLineItems',
+                  params: { items: child ,account:account}
+                })}
               >
            
                 <View className='w-10/12 flex flex-col gap-1'>
@@ -174,5 +181,6 @@ export default function OrderDetails({
         </View>
       </View>
     </ScrollView>
+    </>
   );
 }

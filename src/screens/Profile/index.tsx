@@ -5,15 +5,16 @@ import ProfileLogo from '../../assets/profileLogo.svg';
 import { styles } from './styles';
 import { getAccountDetails } from '../../api/orders.api';
 import PinRed from '../../assets/pinRed.svg';
+import { RootState } from '../../store/store';
+import { shallowEqual, useSelector } from 'react-redux';
 // import { MapPin } from 'lucide-react-native';
 
-type ProfileProps = {
-  account: Record<string, any> | null;
-  // sessionId: string;
-  products: Record<string, any>[];
-};
+export default function Profile() {
+  const account = useSelector((state: RootState) => state.account.account, shallowEqual);
+  const products = useSelector((state: RootState) => state.account.products, shallowEqual);
 
-export default function Profile({ account, products }: ProfileProps) {
+  if (!account) return <Text>Loading account...</Text>;
+
   return (
     <ScrollView className=" flex flex-col p-8 gap-8">
       {/* <Text className="font-extrabold text-green-200">Welcome Profile!</Text> */}
@@ -60,8 +61,13 @@ export default function Profile({ account, products }: ProfileProps) {
       </View>
 
       {products != null && products.length > 0 && (
-        <View className="px-2 py-4">
+        <View className="px-2 py-4 flex flex-row justify-between items-center">
           <Text className="font-regular text-xl text-[#101828]">Installed Products</Text>
+          <TouchableOpacity className="border border-red-800 p-2 rounded-xl">
+            <Text className='text-red-800'>
+              + Add New Product
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
 

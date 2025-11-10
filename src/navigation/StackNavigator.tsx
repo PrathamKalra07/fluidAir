@@ -12,11 +12,15 @@ import Signup from '../screens/Signup';
 import Splash from '../screens/Splash';
 import Rest from '../screens/Rest';
 import OrderDetails from '../screens/OrderDetails';
+import OrdersStack from './OrdersStack';
+import NavigationBar from '../components/NavigationBar';
+import BottomNavBar from '../components/BottomNavBar';
 
 const Stack = createStackNavigator();
 
 export default function StackNavigator() {
   return (
+    <>
     <Stack.Navigator
     initialRouteName='Splash'
       screenOptions={{
@@ -49,17 +53,22 @@ export default function StackNavigator() {
         }),
       }}
     >
+      
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Rest" component={Rest} />
-      <Stack.Screen name="Order" component={OrderDetails}/>
+      <Stack.Screen name="OrdersStack" component={OrdersStack} />
+
+      {/* <Stack.Screen name="Order" component={OrderDetails}/> */}
 
       {/* <Stack.Screen name="Orders" component={Orders} /> */}
       {/* <Stack.Screen name="Contact" component={Contact} /> */}
       {/* <Stack.Screen name="Help" component={Help} /> */}
       {/* <Stack.Screen name="Profile" component={Profile} /> */}
     </Stack.Navigator>
+    <BottomNavBar />
+    </>
   );
 }
