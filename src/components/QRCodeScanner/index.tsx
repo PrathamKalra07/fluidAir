@@ -1,38 +1,73 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
-import { scanBarcodes, BarcodeFormat } from 'react-native-vision-camera-mlkit';
-import { runOnJS } from 'react-native-reanimated';
+import React, { useRef } from 'react';
+import { Alert, Modal, SafeAreaView, StyleSheet } from 'react-native';
+import {
+  Camera,
+  CameraRuntimeError,
+  useCameraDevice,
+  useCodeScanner,
+} from 'react-native-vision-camera';
 
-export default function QRScanner({ onScan }: { onScan: (value: string) => void }) {
-  const devices = useCameraDevices();
-  const device = devices.back;
-
-  const frameProcessor = useFrameProcessor((frame) => {
-    'worklet';
-    const barcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE]);
-    for (const barcode of barcodes) {
-      runOnJS(onScan)(barcode.rawValue);
-    }
-  }, [onScan]);
-
-  if (!device) return <Text>Loading...</Text>;
-
-  return (
-    <View style={styles.container}>
-      <Camera
-        style={StyleSheet.absoluteFill}
-        device={device}
-        isActive={true}
-        frameProcessor={frameProcessor}
-      />
-    </View>
-  );
+interface QRCodeScannerProps {
+  onScan: (value: string) => void;
+  onClose: () => void;
 }
 
+const QRCodeScanner = ({ onScan, onClose }: QRCodeScannerProps) => {
+  const camera = useRef<Camera>(null);
+  const device = useCameraDevice('back');
+
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr'],
+    onCodeScanned: codes => {
+      if (codes.length > 0 && codes[0]?.value) {
+        const scannedValue = codes[0].value;
+        console.log('✅ QR Code Scanned:', scannedValue);
+        onScan(scannedValue);   // send it back to RequestService
+        onClose();              // close modal
+      }
+    },
+  });
+
+  const onError = (error: CameraRuntimeError) => {
+    Alert.alert('Camera Error', error.message);
+    onClose();
+  };
+
+  if (device == null) {
+    Alert.alert('Error', 'No camera device found');
+    onClose();
+    return null;
+  }
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <Modal presentationStyle="fullScreen" animationType="slide" onRequestClose={onClose}>
+        <Camera
+          ref={camera}
+          style={styles.fullScreenCamera}
+          device={device}
+          isActive={true}
+          codeScanner={codeScanner}
+          onError={onError}
+        />
+      </Modal>
+    </SafeAreaView>
+  );
+};
+
+export default QRCodeScanner;
+
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  fullScreenCamera: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
     flex: 1,
-    backgroundColor: 'black',
+    zIndex: 100,
   },
 });

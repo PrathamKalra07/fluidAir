@@ -94,8 +94,8 @@ const querySalesforce = async (
 ): Promise<SalesforceRecord[]> => {
   
   soqlQuery = encodeURIComponent(soqlQuery).replace(/%20/g, '+');
-  const queryEndpoint = `${process.env.REST_BASE_URL}/services/data/v59.0/query?q=${soqlQuery}`;
-  
+  // const queryEndpoint = `${process.env.REST_BASE_URL}/services/data/v59.0/query?q=${soqlQuery}`;
+  const queryEndpoint = `https://dg0000000kpsxmay.my.salesforce.com/services/data/v56.0/query?q=${soqlQuery}`;
   console.log('queryEndpoint ->> '+queryEndpoint)
   console.log('soqlQuery ->> '+soqlQuery)
   console.log('accessToken ->> '+accessToken)

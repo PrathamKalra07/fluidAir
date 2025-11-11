@@ -5,7 +5,7 @@ buildscript {
         compileSdkVersion = 36
         targetSdkVersion = 36
         ndkVersion = "27.1.12297006"
-        kotlinVersion = "2.1.20"
+        kotlinVersion = '1.9.24'
     }
     repositories {
         google()
@@ -19,3 +19,22 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+// --- VisionCamera + Kotlin Internal API Access Workaround ---
+gradle.projectsEvaluated {
+    subprojects {
+        if (plugins.hasPlugin("org.jetbrains.kotlin.android")) {
+            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = "17"
+                    freeCompilerArgs += [
+                        "-Xopt-in=kotlin.RequiresOptIn",
+                        "-Xskip-prerelease-check",
+                        "-Xskip-runtime-version-check",
+                        "-Xjvm-default=all"
+                    ]
+                }
+            }
+        }
+    }
+}
