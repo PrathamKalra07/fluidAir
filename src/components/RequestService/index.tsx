@@ -99,7 +99,7 @@ setFormData({
         </TouchableOpacity>
         {scannedData ? (
   <Text className="text-center text-green-700 mt-2">
-    Scanned: {scannedData}
+    Scanned: {formData.make} {formData.model} {formData.serialNumber}
   </Text>
 ) : null}
 

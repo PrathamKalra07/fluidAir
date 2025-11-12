@@ -5,7 +5,7 @@ buildscript {
         compileSdkVersion = 36
         targetSdkVersion = 36
         ndkVersion = "27.1.12297006"
-        kotlinVersion = '1.9.24'
+        kotlinVersion = "1.9.24"
     }
     repositories {
         google()
@@ -14,7 +14,7 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
@@ -26,14 +26,34 @@ gradle.projectsEvaluated {
         if (plugins.hasPlugin("org.jetbrains.kotlin.android")) {
             tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
                 kotlinOptions {
+                    // ✅ Modern Kotlin setup (safe with 1.9.24)
                     jvmTarget = "17"
-                    freeCompilerArgs += [
-                        "-Xopt-in=kotlin.RequiresOptIn",
-                        "-Xskip-prerelease-check",
-                        "-Xskip-runtime-version-check",
-                        "-Xjvm-default=all"
+                    freeCompilerArgs = [
+                        "-opt-in=kotlin.RequiresOptIn",  // modern flag
+                        "-Xskip-prerelease-check",       // harmless and valid
+                        "-Xjvm-default=all"              // needed for some RN modules
                     ]
                 }
+            }
+        }
+    }
+}
+
+// --- 🩹 Auto-fix for react-native-hole-view Kotlin flag errors ---
+subprojects { sub ->
+    if (sub.name.contains("react-native-hole-view")) {
+        afterEvaluate {
+            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                def args = kotlinOptions.freeCompilerArgs ?: []
+
+                // 🧹 Remove deprecated / invalid flags
+                args = args.findAll { it != "-Xskip-runtime-version-check" }
+
+                // 🧩 Replace deprecated -Xopt-in with modern -opt-in
+                args = args.collect { it == "-Xopt-in" ? "-opt-in" : it }
+
+                kotlinOptions.freeCompilerArgs = args
+                kotlinOptions.jvmTarget = "17" // ensure consistent target
             }
         }
     }

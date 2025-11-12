@@ -21,7 +21,6 @@
     "react-native-dotenv": "^3.4.11",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "^2.29.0",
-    "react-native-hole-view": "^3.0.1",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-permissions": "^5.4.4",
     "react-native-reanimated": "^4.1.3",
