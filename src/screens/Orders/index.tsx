@@ -191,33 +191,34 @@ export default function Orders() {
             <View className={getOrderStatusCss(order.FConnect__Order_Status__c,'view')}>
               <Text className={getOrderStatusCss(order.FConnect__Order_Status__c,'text')}>{order.FConnect__Order_Status__c}</Text>
             </View>
-          <Text className='text-xl font-medium p-1'>
-            {order.Name}
-          </Text>
-          
-          <View className="flex-row flex-wrap justify-between mt-1">
-            <View className="w-[48%] p-1 rounded-lg">
-              <Text className="text-gray-600">Technician</Text>
-              <Text className="font-medium">{order.FConnect__Technician_used__r?.Name}</Text>
+            
+            <Text className='text-xl font-medium p-1'>
+              {order.Name}
+            </Text>
+            
+            <View className="flex-row flex-wrap justify-between mt-1">
+              <View className="w-[48%] p-1 rounded-lg">
+                <Text className="text-gray-600">Technician</Text>
+                <Text className="font-medium">{order.FConnect__Technician_used__r?.Name}</Text>
+              </View>
+
+              <View className="w-[48%] p-1 rounded-lg">
+                <Text className="text-gray-600">Total</Text>
+                <Text className="font-medium">${order.Parent_Order_Total__c}</Text>
+              </View>
+
+              <View className="w-[48%] p-1 rounded-lg">
+                <Text className="text-gray-600">Start</Text>
+                <Text className="font-medium">{order.Last_Event_Start_Date__c}</Text>
+              </View>
+
+              <View className="w-[48%] p-1 rounded-lg">
+                <Text className="text-gray-600">End</Text>
+                <Text className="font-medium">{order.Last_Event_End_Date__c}</Text>
+              </View>
             </View>
 
-            <View className="w-[48%] p-1 rounded-lg">
-              <Text className="text-gray-600">Total</Text>
-              <Text className="font-medium">${order.Parent_Order_Total__c}</Text>
-            </View>
-
-            <View className="w-[48%] p-1 rounded-lg">
-              <Text className="text-gray-600">Start</Text>
-              <Text className="font-medium">{order.Last_Event_Start_Date__c}</Text>
-            </View>
-
-            <View className="w-[48%] p-1 rounded-lg">
-              <Text className="text-gray-600">End</Text>
-              <Text className="font-medium">{order.Last_Event_End_Date__c}</Text>
-            </View>
-          </View>
-
-        </View> 
+          </View> 
           </TouchableOpacity>
         )
       )}

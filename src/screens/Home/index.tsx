@@ -107,7 +107,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <NavigationBar account={account} />
 
-      <View style={{ flex: 1, paddingTop: 120, paddingBottom: 90 }}>
+      <View style={{ flex: 1,  paddingBottom: 90 }}>
         {renderScreen()}
       </View>
 

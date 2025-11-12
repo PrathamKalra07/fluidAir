@@ -85,6 +85,8 @@ const BottomNavBar = () => {
           shadowRadius: 5,
           elevation: 5,
           paddingVertical: 10,
+          paddingRight : 15,
+          paddingLeft : 15
         },
       ]}
     >

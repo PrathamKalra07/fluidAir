@@ -11,6 +11,32 @@ type userInfo = {
     email : string
 }
 
+//method to use send email rest resource
+const sendEmailFromSf = async(accessToken : string) =>{
+
+    const apiUrl = `${process.env.REST_BASE_URL_SANDBOX}/services/apexrest/SendEmailRest/`;
+
+    const payload = {
+        to: "dhruv.gandhi@eruditeworks.com",
+        subject: "Hello from React Native",
+        body: "This is a test email sent via Salesforce REST resource."
+    };
+
+    axios.post(apiUrl, payload, {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+        })
+        .then(response => {
+        // Handle success
+        console.log('Response:', response.data);
+        })
+        .catch(error => {
+        // Handle error
+        console.log('Error:', error.response ? error.response.data : error.message);
+    });
+}
 
 //method for getting FConnect__Order_Status__c's picklist values
 const getStatusPicklistValue = async(accessToken : string) => {
@@ -76,9 +102,6 @@ const getAllAccountOrder = async(accessToken : string  , accountInfo : any) =>{
 
     let soqlQuery : string = '';
     let productOrders : SalesforceRecord[] = [];
-
-//     soqlQuery = `SELECT Id, (SELECT Id, (SELECT Id FROM FConnect__Required_Materials__r ) FROM Orders__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,FConnect__Order_Status__c,
-//  Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name FROM FConnect__Service_Order__c WHERE FConnect__Account__c = '${accountInfo.Id}' AND Parent_Order__c = null`;
 
     soqlQuery = `SELECT Id, (Select Id, (Select Id , Name, Item_Description__c, FConnect__Quantity_Neeed__c, Discounted_Unit_Price__c, Extended_Total__c from FConnect__Required_Materials__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,FConnect__Order_Status__c,
     Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name FROM Orders__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,FConnect__Order_Status__c,
@@ -153,4 +176,4 @@ const getOrderLineItems = async(accessToken : string  , childOrderInfo : Salesfo
     return orderLineItems;
 }
 
-export {getStatusPicklistValue , getAccountDetails , getAllAccountOrder, getAccountProducts , getProductOrders , getChildOrders , getOrderLineItems}
+export {getStatusPicklistValue , sendEmailFromSf , getAccountDetails , getAllAccountOrder, getAccountProducts , getProductOrders , getChildOrders , getOrderLineItems}

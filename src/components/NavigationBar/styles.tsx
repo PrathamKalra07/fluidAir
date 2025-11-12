@@ -15,8 +15,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     color : 'white',
-    paddingLeft : 20,
-    paddingRight : 20,
+    // paddingLeft : 20,
+    // paddingRight : 20,
     zIndex:1000
 
 

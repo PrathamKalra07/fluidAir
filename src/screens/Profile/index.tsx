@@ -8,6 +8,7 @@ import PinRed from '../../assets/pinRed.svg';
 import { RootState } from '../../store/store';
 import { shallowEqual, useSelector } from 'react-redux';
 import SettingsWhite from '../../assets/settingsWhite.svg';
+import Edit from '../../assets/edit.svg';
 import { RequestService } from '../../components/RequestService';
 
 export default function Profile() {
@@ -60,27 +61,30 @@ export default function Profile() {
         <View className="border-b border-b-gray-200 w-full mx-auto" />
 
         <View className="flex flex-col gap-3">
-          <View className="">
-            <Text className="text-sm text-gray-500">Email Address</Text>
-            <Text className="text-xl">{account?.Primary_Contact_Email__c}</Text>
+          <View className='flex flex-row items-center justify-between'>
+            <View className="">
+              <Text className="text-sm text-gray-500">Email Address</Text>
+              <Text className="text-xl">{account?.Primary_Contact_Email__c}</Text>
+            </View>
+            <Edit height={20} width={20}/>
           </View>
-          <View className="">
-            <Text className="text-sm text-gray-500">Phone Number</Text>
-            <Text className="text-xl">{account?.Primary_Contact_Phone__c}</Text>
+          <View className='flex flex-row items-center justify-between'>
+            <View className="">
+              <Text className="text-sm text-gray-500">Phone Number</Text>
+              <Text className="text-xl">{account?.Primary_Contact_Phone__c}</Text>
+            </View>
+            <Edit height={20} width={20}/>
           </View>
-          <View className="">
-            <Text className="text-sm text-gray-500">Address</Text>
-            <Text className="text-xl">{account?.Mailing_Street__c}</Text>
-            <Text className="text-xl">
-              {account?.Mailing_City__c + ' - ' + account?.Mailing_ZIP__c}
-            </Text>
+          <View className='flex flex-row items-center justify-between'>
+            <View className="">
+              <Text className="text-sm text-gray-500">Address</Text>
+              <Text className="text-xl">{account?.Mailing_Street__c}</Text>
+              <Text className="text-xl">
+                {account?.Mailing_City__c + ' - ' + account?.Mailing_ZIP__c}
+              </Text>
+            </View>
+            <Edit height={18} width={18}/>
           </View>
-        </View>
-
-        <View className="mt-4">
-          <TouchableOpacity className="mx-auto bg-[#80062e] py-2.5 px-4 rounded-xl">
-            <Text className="text-white">Edit Profile</Text>
-          </TouchableOpacity>
         </View>
       </View>
 

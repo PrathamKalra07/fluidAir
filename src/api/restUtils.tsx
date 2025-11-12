@@ -18,10 +18,11 @@ type response = {
   data: string;
 };
 
-type userInfo = {
-    id : string
-    name : string,
-    email : string
+interface UpdateResponse {
+  success: boolean;
+  status: number;
+  data?: any;
+  error?: any;
 }
 
 //to fetch session for salesforce callout
@@ -95,7 +96,7 @@ const querySalesforce = async (
   
   soqlQuery = encodeURIComponent(soqlQuery).replace(/%20/g, '+');
   // const queryEndpoint = `${process.env.REST_BASE_URL}/services/data/v59.0/query?q=${soqlQuery}`;
-  const queryEndpoint = `https://dg0000000kpsxmay.my.salesforce.com/services/data/v56.0/query?q=${soqlQuery}`;
+  const queryEndpoint = `https://dg0000000kpsxmay.my.salesforce.com/services/data/v58.0/query?q=${soqlQuery}`;
   console.log('queryEndpoint ->> '+queryEndpoint)
   console.log('soqlQuery ->> '+soqlQuery)
   console.log('accessToken ->> '+accessToken)
@@ -117,5 +118,33 @@ const querySalesforce = async (
     });
 }
 
+//Update Record in Salesforce
+const updateSalesforceRecord = async(
+  accessToken: string,
+  objectName: string,
+  recordId: string,
+  fieldsToUpdate: Record<string, any>
 
-export {fetchUserSessionId , querySalesforce};
+): Promise<UpdateResponse> => {
+  const url = `${process.env.REST_BASE_URL_SANDBOX}/services/data/v65.0/sobjects/${objectName}/${recordId}`;
+
+  try {
+    const response = await axios.patch(url, fieldsToUpdate, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Salesforce returns 204 No Content on success for PATCH update calls
+    if (response.status === 204) {
+      return { success: true, status: response.status };
+    }
+
+    return { success: false, status: response.status, data: response.data };
+  } catch (error: any) {
+    return { success: false, status: error.response?.status, error: error.message || error };
+  }
+}
+
+export {fetchUserSessionId , querySalesforce };
