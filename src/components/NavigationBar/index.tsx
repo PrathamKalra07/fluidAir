@@ -8,14 +8,17 @@ import Profile2White from '../../assets/profile2White.svg';
 import DownArrow from '../../assets/downarrowWhite.svg';
 import SignOutSvg from '../../assets/signout.svg';
 import { TouchableWithoutFeedback } from 'react-native';
+import { shallowEqual, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
-type navigationBarProps = {
-  account: Record<string,any> | null;
-}
 
-export default function NavigationBar({ account }: navigationBarProps) {
+export default function NavigationBar() {
+
+  const account = useSelector((state: RootState) => state.account.accountName, shallowEqual);
   const navigation = useNavigation();
   const [logoutVisible,setLogoutVisible] = useState(false);
+
+
 
   return (
 
@@ -31,7 +34,7 @@ export default function NavigationBar({ account }: navigationBarProps) {
       <View className='h-full flex flex-row justify-between items-end px-8 py-6 relative bottom-0'>
         <View>
             <Text style={{fontSize : 12, color:'white'}}>Welcome Back</Text>
-            <Text style={{color:'white',fontSize:18}}>{account?.Primary_Contact__r.Name}</Text>
+            <Text style={{color:'white',fontSize:18}}>{account}</Text>
         </View>
 
         <TouchableOpacity onPress={()=>{logoutVisible?setLogoutVisible(false):setLogoutVisible(true)}}  className='flex flex-row'>

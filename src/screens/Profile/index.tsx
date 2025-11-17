@@ -10,30 +10,14 @@ import { shallowEqual, useSelector } from 'react-redux';
 import SettingsWhite from '../../assets/settingsWhite.svg';
 import Edit from '../../assets/edit.svg';
 import { RequestService } from '../../components/RequestService';
+import GtRed from '../../assets/gtRed.svg';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Profile() {
+
+  const navigation = useNavigation();
   const account = useSelector((state: RootState) => state.account.account, shallowEqual);
   const products = useSelector((state: RootState) => state.account.products, shallowEqual);
-
-  const [selectedProducts,setSelectedProducts]=useState<Record<string,any>[]>([]);
-  const [RequestServiceVisible,setRequestServiceVisible] = useState(false);
-  
-
-  const selectProducts = (product:Record<string,any>) =>{
-    let updatedSelection = [...selectedProducts];
-    const index = updatedSelection.findIndex((p) => p.Id === product.Id);
-    if (index > -1) {
-      // Product already selected, remove it
-      updatedSelection.splice(index, 1);
-    } else {
-      // Product not selected, add it
-      updatedSelection.push(product);
-    }
-    setSelectedProducts(updatedSelection);
-
-    console.log('Selected Products : ',updatedSelection);
-
-  }
 
 
   if (!account) return <Text>Loading account...</Text>;
@@ -91,11 +75,7 @@ export default function Profile() {
       {products != null && products.length > 0 && (
         <View className="px-2 py-4 flex flex-row justify-between items-center">
           <Text className="font-regular text-xl text-[#101828]">Installed Products</Text>
-          <TouchableOpacity onPress={()=>setRequestServiceVisible(true)} className="border border-red-800 p-2 rounded-xl">
-            <Text className='text-red-800'>
-              + Add New Product
-            </Text>
-          </TouchableOpacity>
+       
         </View>
       )}
 
@@ -104,36 +84,71 @@ export default function Profile() {
           products?.map((product, index) => (
             <TouchableOpacity
               key={index}
-              className={selectedProducts.includes(product)?"border border-red-700 py-2 px-4 bg-white rounded-xl":"border border-gray-300 rounded-xl py-2 px-4 bg-white"}
-              onPress={() => selectProducts(product)}
+              className="border border-gray-300 rounded-xl py-4 px-6 bg-white flex flex-row"
+              onPress={()=>{
+                navigation.navigate('ProductStack',{
+                  screen: 'ProductDetails',
+                  params: { product: product}
+                })
+              }}
             >
-              <View className="flex flex-row justify-between items-center">
-                <Text className="text-lg font-medium my-1">{product.Name}</Text>
+              <View className='w-[90%]'>
 
-                {product.Status__c === 'Active' ? (
-                  <View className="flex flex-row items-center font-semibold">
-                    <Text className="text-4xl  text-green-600">•</Text>
-                    <Text className=" text-green-600">Active</Text>
-                  </View>
-                ) : (
-                  <View className="flex flex-row items-center font-semibold">
-                    <Text className="text-4xl  text-gray-600">•</Text>
-                    <Text className=" text-gray-600">Inactive</Text>
-                  </View>
-                )}
+              <View className='flex flex-row justify-between'>
+                <View className='w-[50%]'>
+                  <Text className='text-sm text-gray-500'>
+                    Make
+                  </Text>
+                  <Text className='text-lg'>{product.Make__c}</Text>
+                </View>
+                <View className='w-[50%]'>
+                  <Text className='text-sm text-gray-500'>
+                    Model
+                  </Text>
+                  <Text className='text-lg'>{product.Model__c}</Text>
+                </View>
+                
               </View>
-
-              <Text className="text-sm font-medium my-1">
-                {product.Short_Description__c || 'No description available'}
-              </Text>
-
+              
+              <View className='flex flex-row justify-between my-2'>
+                <View className='w-[50%]'>
+                  <Text className='text-sm text-gray-500'>
+                    Serial Number
+                  </Text>
+                  <Text className='text-lg'>{product.Serial_Number__c}</Text>
+                </View>
+                <View className='w-[50%]'>
+                  <Text className='text-sm text-gray-500'>
+                    IP Category
+                  </Text>
+                  <Text className='text-lg'>{product.IP_Category__c}</Text>
+                </View>
+                
+              </View>
+              
+              <View className='mb-2'>
+              <Text className='text-sm text-gray-500'>Site</Text>
               <View className="flex-1 flex-row items-center gap-1">
                 <PinRed width={14} height={14} />
-
+                
                 <Text className="text-sm text-rose-900 font-medium my-1">
                   {product.FConnect__Site__r.Name || 'Unknown location'}
                 </Text>
               </View>
+              </View>
+              <View>
+              <Text className='text-sm text-gray-500'>
+                Description
+              </Text>
+              <Text className="text-sm font-medium my-1">
+                {product.Short_Description__c || 'No description available'}
+              </Text>
+              </View>
+              </View>
+              <View className='w-[10%] items-center justify-center'>
+                <GtRed width={40} height={40} />
+              </View>
+
             </TouchableOpacity>
           ))
         ) : (
@@ -184,16 +199,6 @@ export default function Profile() {
         )}
       </View>
     </ScrollView>
-        
-        <View className='fixed px-8 bottom-2'>
-          <TouchableOpacity className={selectedProducts.length>0?'bg-[#80062e] py-4 rounded-xl flex flex-row justify-center gap-2 align-middle items-center':'bg-[#975c70] py-4 rounded-xl flex flex-row justify-center gap-2 align-middle items-center'} disabled={selectedProducts.length > 0 ? false : true } ><SettingsWhite /><Text className='text-white text-center'>Request Service</Text></TouchableOpacity>
-        </View>
-  
-        {RequestServiceVisible &&
-        <View className='absolute inset-0 justify-center items-center bg-black/20 z-50'>
-          <RequestService setRequestServiceVisible={setRequestServiceVisible} />
-        </View>
-          }
         </>
   );
 }

@@ -1,3 +1,4 @@
+import Config from 'react-native-config';
 import { querySalesforce} from './restUtils'
 import axios from 'axios';
 
@@ -14,7 +15,7 @@ type userInfo = {
 //method to use send email rest resource
 const sendEmailFromSf = async(accessToken : string) =>{
 
-    const apiUrl = `${process.env.REST_BASE_URL_SANDBOX}/services/apexrest/SendEmailRest/`;
+    const apiUrl = `${Config.REST_BASE_URL_SANDBOX}/services/apexrest/SendEmailRest/`;
 
     const payload = {
         to: "dhruv.gandhi@eruditeworks.com",
@@ -41,7 +42,8 @@ const sendEmailFromSf = async(accessToken : string) =>{
 //method for getting FConnect__Order_Status__c's picklist values
 const getStatusPicklistValue = async(accessToken : string) => {
 
-    let endpoint : string = 'https://dg0000000kpsxmay.my.salesforce.com/services/data/v65.0/ui-api/object-info/FConnect__Service_Order__c/picklist-values/012000000000000AAA/FConnect__Order_Status__c'
+    // let endpoint : string = 'https://dg0000000kpsxmay.my.salesforce.com/services/data/v65.0/ui-api/object-info/FConnect__Service_Order__c/picklist-values/012000000000000AAA/FConnect__Order_Status__c'
+        let endpoint : string = `${Config.REST_BASE_URL_SANDBOX}/services/data/v65.0/ui-api/object-info/FConnect__Service_Order__c/picklist-values/012000000000000AAA/Parent_Order_Status2__c`
 
     return axios
     .get<any>(endpoint, {
@@ -85,7 +87,7 @@ const getAccountProducts = async(accessToken : string  , accountInfo : Salesforc
     let soqlQuery : string = '';
     let accountProducts : SalesforceRecord[] = [];
 
-    soqlQuery = `SELECT Id, Name, FConnect__Customer__c, FConnect__Customer__r.Name, Short_Description__c, FConnect__Site__r.Name, Account_Status__c, Status_Indicator__c, Status__c FROM FConnect__Installed_Products__c WHERE FConnect__Customer__c = '${accountInfo?.Id}'`;
+    soqlQuery = `SELECT Id, Name, FConnect__Customer__c,Make__c,Model__c,Serial_Number__c, Days_Since_Install__c,Months_Since_Last_PM__c, IP_Category__c,FConnect__Customer__r.Name, Short_Description__c, FConnect__Site__r.Name, Account_Status__c, Status_Indicator__c, Status__c FROM FConnect__Installed_Products__c WHERE FConnect__Customer__c = '${accountInfo?.Id}'`;
     
     accountProducts  = await querySalesforce(
         accessToken,
@@ -103,16 +105,20 @@ const getAllAccountOrder = async(accessToken : string  , accountInfo : any) =>{
     let soqlQuery : string = '';
     let productOrders : SalesforceRecord[] = [];
 
-    soqlQuery = `SELECT Id, (Select Id, (Select Id , Name, Item_Description__c, FConnect__Quantity_Neeed__c, Discounted_Unit_Price__c, Extended_Total__c from FConnect__Required_Materials__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,FConnect__Order_Status__c,
-    Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name FROM Orders__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,FConnect__Order_Status__c,
-    Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name FROM FConnect__Service_Order__c WHERE FConnect__Account__c = '${accountInfo.Id}' AND Parent_Order__c = null` 
+    // soqlQuery = `SELECT Id, (Select Id, (Select Id, (SELECT Id,Name,Rate_Hour__c,Tech_Name__c,FConnect__Estimated_Duration__c,Billable_Hours__c FROM FConnect__Activitie__r), Name, Item_Description__c, FConnect_Quantity_Neeed__c, Discounted_Unit_Price__c,Item_Name__c, Extended_Total__c from Required_Materials__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,FConnect__Order_Status__c,Service_Type__c,
+    // Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name FROM Orders__r), Name, Grand_Total__c, Date_Approved__c,Customer_Purchase_Order__c,Customer_Work_Order__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,Parent_Order_Status2__c,
+    // Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name FROM FConnect__Service_Order__c WHERE FConnect__Account__c = '${accountInfo.Id}' AND Parent_Order__c = null` 
+
+    soqlQuery = `SELECT Id, (Select Id, (Select Id,Name,Tech_Name__c,Rate_Hour__c,FConnect__Estimated_Duration__c,Billable_Hours__c from FConnect__Activities__r),(Select Id, Name, Item_Description__c, FConnect_Quantity_Neeed__c, Discounted_Unit_Price__c,Item_Name__c, Extended_Total__c from Required_Materials__r), Name, Grand_Total__c, Date_Approved__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,FConnect__Order_Status__c,Service_Type__c,
+    Last_Event_End_Date__c, Last_Event_Start_Date__c,FConnect__Status__c, FConnect__Account__c ,FConnect__Account__r.Name FROM Orders__r), Name, Grand_Total__c, Date_Approved__c,Customer_Purchase_Order__c,Customer_Work_Order__c, FConnect__Site_Name__r.Name, FConnect__Technician_used__r.Name, Parent_Order_Total__c,Parent_Order_Status2__c,
+    Last_Event_End_Date__c, Last_Event_Start_Date__c, FConnect__Account__c ,FConnect__Account__r.Name FROM FConnect__Service_Order__c WHERE FConnect__Account__c = '${accountInfo.Id}' AND Parent_Order__c = null`
 
     productOrders  =  await querySalesforce(
         accessToken,
         soqlQuery
     )
 
-    console.log('getAllAccountOrder -> '+productOrders);
+    console.log('getAllAccountOrder -> ',productOrders);
 
     return productOrders;
     

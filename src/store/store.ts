@@ -13,10 +13,10 @@ export const store = configureStore({
   devTools: true, // ✅ enables Redux DevTools automatically
 });
 
-// store.subscribe(() => {
-//   const state = store.getState();
-//   console.log('🧠 Redux Store Updated:', JSON.stringify(state, null, 2));
-// });
+store.subscribe(() => {
+  const state = store.getState();
+  console.log('🧠 Redux Store Updated:', JSON.stringify(state, null, 2));
+});
 
 // ✅ For TypeScript convenience
 export type RootState = ReturnType<typeof store.getState>;

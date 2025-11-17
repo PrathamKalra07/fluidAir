@@ -10,6 +10,7 @@ import Signup from '../screens/Signup';
 import Home from '../screens/Home';
 import Rest from '../screens/Rest';
 import OrdersStack from './OrdersStack';
+import ProductStack from './ProductStack';
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,7 @@ export default function StackNavigator() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Rest" component={Rest} />
         <Stack.Screen name="OrdersStack" component={OrdersStack} />
+        <Stack.Screen name="ProductStack" component={ProductStack} />
       </Stack.Navigator>
 
     </>

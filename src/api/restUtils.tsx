@@ -1,5 +1,7 @@
 import * as xml2JS from 'react-native-xml2js';
 import axios from 'axios';
+import Config from 'react-native-config';
+
 
 type SalesforceRecord = {
   Id: string;
@@ -27,11 +29,11 @@ interface UpdateResponse {
 
 //to fetch session for salesforce callout
 const fetchUserSessionId = async () : Promise<response> => {
-  const endpoint = `${process.env.PROD_LOGIN_URL}/services/Soap/u/57.0`;
+  const endpoint = `${Config.SANDBOX_LOGIN_URL}/services/Soap/u/57.0`;
 
   console.log('endpoint', endpoint);
 
-  const password =`${process.env.FLUIDAIR_PASSWORD}` + `${process.env.SECURITY_TOKEN}`;
+  const password =`${Config.FLUIDAIR_PASSWORD_SANDBOX}` + `${Config.SECURITY_TOKEN_SANDBOX}`;
   let parseString = xml2JS.parseString;
   let stripNS = xml2JS.processors.stripPrefix;
   const options = {
@@ -47,11 +49,11 @@ const fetchUserSessionId = async () : Promise<response> => {
       'Content-Type': 'text/xml',
     },
   };
-  
+  console.log('config : ', Config.FLUIDAIR_USERNAME_SANDBOX);
   let xmlBody = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:partner.soap.sforce.com">
     <soapenv:Body>
       <urn:login>
-        <urn:username>${process.env.FLUIDAIR_USERNAME}</urn:username>
+        <urn:username>${Config.FLUIDAIR_USERNAME_SANDBOX}</urn:username>
         <urn:password>${password}</urn:password>
       </urn:login>
     </soapenv:Body>
@@ -95,8 +97,8 @@ const querySalesforce = async (
 ): Promise<SalesforceRecord[]> => {
   
   soqlQuery = encodeURIComponent(soqlQuery).replace(/%20/g, '+');
-  // const queryEndpoint = `${process.env.REST_BASE_URL}/services/data/v59.0/query?q=${soqlQuery}`;
-  const queryEndpoint = `https://dg0000000kpsxmay.my.salesforce.com/services/data/v58.0/query?q=${soqlQuery}`;
+  const queryEndpoint = `${Config.REST_BASE_URL_SANDBOX}/services/data/v59.0/query?q=${soqlQuery}`;
+  // const queryEndpoint = `https://dg0000000kpsxmay.my.salesforce.com/services/data/v58.0/query?q=${soqlQuery}`;
   console.log('queryEndpoint ->> '+queryEndpoint)
   console.log('soqlQuery ->> '+soqlQuery)
   console.log('accessToken ->> '+accessToken)
@@ -126,7 +128,7 @@ const updateSalesforceRecord = async(
   fieldsToUpdate: Record<string, any>
 
 ): Promise<UpdateResponse> => {
-  const url = `${process.env.REST_BASE_URL_SANDBOX}/services/data/v65.0/sobjects/${objectName}/${recordId}`;
+  const url = `${Config.REST_BASE_URL_SANDBOX}/services/data/v65.0/sobjects/${objectName}/${recordId}`;
 
   try {
     const response = await axios.patch(url, fieldsToUpdate, {

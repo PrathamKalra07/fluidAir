@@ -1,13 +1,15 @@
 import * as xml2JS from 'react-native-xml2js';
 import axios from 'axios';
+import Config from 'react-native-config';
+
 
 const fetchUserSessionId = async () => {
-  const endpoint = `${process.env.PROD_LOGIN_URL}/services/Soap/u/57.0`;
+  const endpoint = `${Config.PROD_LOGIN_URL}/services/Soap/u/57.0`;
 
   console.log('endpoint', endpoint);
 
   const password =
-    `${process.env.FLUIDAIR_PASSWORD}` + `${process.env.SECURITY_TOKEN}`;
+    `${Config.FLUIDAIR_PASSWORD}` + `${Config.SECURITY_TOKEN}`;
   let parseString = xml2JS.parseString;
   let stripNS = xml2JS.processors.stripPrefix;
   const options = {
@@ -27,7 +29,7 @@ const fetchUserSessionId = async () => {
   let xmlBody = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:partner.soap.sforce.com">
     <soapenv:Body>
       <urn:login>
-        <urn:username>${process.env.FLUIDAIR_USERNAME}</urn:username>
+        <urn:username>${Config.FLUIDAIR_USERNAME}</urn:username>
         <urn:password>${password}</urn:password>
       </urn:login>
     </soapenv:Body>

@@ -4,14 +4,16 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
 import { fetchAccountData } from '../../store/slices/accountSlice';
-import NavigationBar from '../../components/NavigationBar';
 import BottomNavBar from '../../components/BottomNavBar';
 import Profile from '../Profile';
 import Orders from '../Orders';
-import Help from '../Help';
 import Contact from '../Contact';
 import { styles } from './styles';
 import { useNavigationTab } from '../../context/NavigationContext';
+import Service from '../Service';
+
+let hasFetched = false;
+
 
 export default function HomeScreen() {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,14 +26,14 @@ export default function HomeScreen() {
   const [tabLoading, setTabLoading] = useState(false);
   const [loadedTabs, setLoadedTabs] = useState<string[]>(['profile']); // only profile preloaded
 
-  const hasFetchedRef = useRef(false);
+  // const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    if (!hasFetchedRef.current) {
-      hasFetchedRef.current = true;
+    if (!hasFetched) {
+      hasFetched = true;
       dispatch(
         fetchAccountData({
-          email: 'aaron@plastechengineering.com',
+          email: 'johndoe@example.com',
           name: 'Plas-Tech Engineering',
         })
       );
@@ -75,8 +77,8 @@ export default function HomeScreen() {
         return <Profile account={account} products={products} />;
       case 'orders':
         return <Orders account={account} />;
-      case 'help':
-        return <Help />;
+      case 'service':
+        return <Service />;
       case 'contact':
         return <Contact />;
       default:
@@ -105,8 +107,6 @@ export default function HomeScreen() {
   // 🔹 Main UI
   return (
     <View style={styles.container}>
-      <NavigationBar account={account} />
-
       <View style={{ flex: 1,  paddingBottom: 90 }}>
         {renderScreen()}
       </View>

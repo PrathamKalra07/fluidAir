@@ -4,6 +4,7 @@ import StackNavigator from './StackNavigator';
 import BottomNavBar from '../components/BottomNavBar';
 import { shallowEqual, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import NavigationBar from '../components/NavigationBar';
 
 function getActiveRouteName(state: any): string {
   let route = state?.routes?.[state.index];
@@ -30,6 +31,7 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer ref={navigationRef}>
+      {(!hiddenBars.includes(currentRoute) && !loading) && <NavigationBar />}
       <StackNavigator />
       {(!hiddenBars.includes(currentRoute) && !loading) && <BottomNavBar />}
     </NavigationContainer>

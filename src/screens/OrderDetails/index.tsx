@@ -10,8 +10,9 @@ import { useNavigation } from '@react-navigation/native';
 import OrderLineItems from '../OrderLineItems';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import GtRed from '../../assets/gtRed.svg';
+import CardWhite from '../../assets/cardWhite.svg';
 import { TouchableWithoutFeedback } from 'react-native';
-import NavigationBar from '../../components/NavigationBar';
+import { formatIsoToDDMMYY } from '../../utils/dateUtils';
 
 type OrderDetails = {
   order: Record<string, any> | null;
@@ -33,14 +34,13 @@ export default function OrderDetails() {
   // const { order } = route.params;
   useEffect(() => {
     console.log('order : ', order);
-    console.log('childOrders: ', order?.Orders__r.records);
-    console.log('total child count : ', order?.Orders__r.totalSize);
+    // console.log('childOrders: ', order?.Orders__r.records);
+    // console.log('total child count : ', order?.Orders__r.totalSize);
   }, []);
 
   return (
     <>
-    <NavigationBar account={account} />
-    <ScrollView contentContainerClassName='pt-[120]'> 
+    <ScrollView contentContainerClassName='pb-[100]'> 
 
       <View className='p-4 flex flex-col gap-4'>
 
@@ -56,13 +56,13 @@ export default function OrderDetails() {
         <View className="border border-gray-300 rounded-xl p-4 bg-white  ">
           <View className="flex-1 flex-row my-1 w-full">
             <View className="flex flex-row w-3/5">
-              <Text className="text-gray-500">Order ID : </Text>
+              <Text className="text-gray-500">Parent Order : </Text>
               <Text className="font-semibold">{order?.Name}</Text>
             </View>
-            <View className="flex flex-row w-2/5">
-              <Text className="text-gray-500">Status : </Text>
-              <Text className="font-semibold">
-                {order?.FConnect__Order_Status__c}
+            <View className="flex flex-row border-2 border-gray-200 px-4 py-0 rounded-full">
+              <Text className="text-gray-500"></Text>
+              <Text className="">
+                {order?.Parent_Order_Status2__c}
               </Text>
             </View>
           </View>
@@ -85,19 +85,35 @@ export default function OrderDetails() {
           </View>
           <View className="flex-1 flex-row my-1">
             <View className="flex flex-row w-3/5">
-              <Text className="text-gray-500">Start Date : </Text>
+              <Text className="text-gray-500">Start : </Text>
               <Text className="font-semibold">
-                {order?.Last_Event_Start_Date__c}
+                {formatIsoToDDMMYY(order?.Last_Event_Start_Date__c)}
               </Text>
             </View>
             <View className="flex flex-row w-2/5">
-              <Text className="text-gray-500">End Date : </Text>
+              <Text className="text-gray-500">End : </Text>
               <Text className="font-semibold">
-                {order?.Last_Event_End_Date__c}
+                {formatIsoToDDMMYY(order?.Last_Event_End_Date__c)}
               </Text>
             </View>
           </View>
+            <View className='my-1 flex flex-row'>
+              <Text className='text-gray-500'>Purchase Order No : </Text>
+              <Text className="font-semibold">{order?.Customer_Purchase_Order__c}</Text>
+            </View>
+            <View className='my-1 flex flex-row'>
+              <Text className='text-gray-500'>Work Order No :</Text>
+              <Text className="font-semibold">{order?.Customer_Work_Order__c}</Text>
+            </View>
         </View>
+        {order?.Parent_Order_Status2__c == 'Closed' && 
+        <View>
+          <TouchableOpacity className='bg-rose-800 py-3 flex flex-row justify-center items-center gap-3 rounded-xl'>
+            <CardWhite height={22} width={22} />
+            <Text className='text-white text-lg'>Pay Invoice</Text>
+          </TouchableOpacity>
+        </View>
+        }
 
         <View className="flex-1 flex-row px-2 justify-between">
           <Text className="text-xl font-medium">Child Orders</Text>
@@ -108,7 +124,7 @@ export default function OrderDetails() {
 
           {/* Render child orders if present */}
           {/* <Text>{}</Text> */}
-          {order?.Orders__r?.totalSize > 0 ? (
+          {order && order.Orders__r && order?.Orders__r?.records?.length > 0 ? (
             order?.Orders__r.records.map((child, index) => (
               <TouchableOpacity
                 key={index}
@@ -122,52 +138,35 @@ export default function OrderDetails() {
            
                 <View className='w-10/12 flex flex-col gap-1'>
 
-                  <View className="flex-1 flex-row justify-between items-center">
-                    <Text className="font-medium">{child.Name}</Text>
-                    <Text className="font-bold bg-gray-100 rounded-lg py-0.5 px-1.5">
-                      ${child.Grand_Total__c}
-                    </Text>
+                  <View className='flex flex-row'>
+                    <Text className="text-lg font-medium w-3/4">{child.Name}</Text>
+                    <Text className=' pl-4 pr-4 rounded-full border-2 border-gray-200'>{child.FConnect__Status__c}</Text>
                   </View>
-
-                  <View className="flex-1 flex-row justify-between items-center">
-                    <View className="flex flex-row gap-2">
-                      <Text className="text-gray-500">Approved Date:</Text>
-                      <Text className="font-medium">
-                        {new Date(child.Date_Approved__c).toLocaleDateString(
-                          'en-US',
-                          {
-                            year: 'numeric',
-                            month: 'short', // "Jan", "Feb", etc.
-                            day: 'numeric',
-                          },
-                        )}
+                  <View className='flex flex-row'>
+                    <View className='flex flex-row w-3/4 flex-wrap'>
+                      <Text className='text-gray-500'>
+                        Service Type : </Text>
+                      <Text>
+                        {child.Service_Type__c}
                       </Text>
                     </View>
-                    <View className="flex flex-row items-center justify-end items-center">
-                      <Text className="text-3xl"> • </Text>
-                      <Text>{child.FConnect__Order_Status__c}</Text>
-                    </View>
+                    <Text className='text-rose-800'>{child.Required_Materials__r?.totalSize || 0} item</Text>
                   </View>
-
-                  <View className="flex-1 flex-row justify-between items-center">
-                    <View className="flex flex-row">
-                      <Text className="text-gray-500">Site : </Text>
-                      <Text className="font-medium">
-                        {child.FConnect__Site_Name__r.Name}
-                      </Text>
+                  <View className='flex flex-row justify-between'>
+                    <View className='flex flex-row flex-wrap w-3/4' >
+                    <Text className='text-gray-500'>Site : </Text>
+                    <Text>{child.FConnect__Site_Name__r?.Name}</Text>
                     </View>
-
-                    <View className="flex-1 flex-row justify-end items-end">
-                      <Text className="font-medium text-red-700">
-                        {child.FConnect__Required_Materials__r?.totalSize &&
-                        child.FConnect__Required_Materials__r.totalSize > 0
-                          ? child.FConnect__Required_Materials__r.totalSize
-                          : 0}{' '}
-                        Items
+                    <View className='flex flex-row '>
+                      <Text className='text-gray-500 text-lg'>
+                        Total : 
+                      </Text>
+                      <Text className='font-semibold text-lg'>
+                        ${child.Grand_Total__c}
                       </Text>
                     </View>
                   </View>
-
+                  
                 </View>
                 <View className="w-2/12 flex justify-center items-end">
                   <GtRed height={25} width={25} />
@@ -178,6 +177,7 @@ export default function OrderDetails() {
           ) : (
             <Text className="text-gray-400 italic p-4">No child orders</Text>
           )}
+
         </View>
       </View>
     </ScrollView>

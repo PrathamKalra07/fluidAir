@@ -7,6 +7,7 @@ import { OrdersStackParamList } from '../../navigation/OrdersStack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
+import { formatIsoToDDMMYY } from '../../utils/dateUtils';
 
 const FilterButton = ({
   label,
@@ -38,13 +39,14 @@ export default function Orders() {
     const navigation = useNavigation();
     const dispatch = useDispatch<AppDispatch>();
 
-    const {orders,account,sessionId} = useSelector((state: RootState) => ({
+    const {orders,ordersCategory,account,sessionId} = useSelector((state: RootState) => ({
       orders: state.orders.orders,
+      ordersCategory: state.orders.orderCategories,
       account: state.account.account,
       sessionId: state.account.sessionId,
     }));
 
-  const [filter, setFilter] = useState('all');
+  // const [filter, setFilter] = useState('all');
 
   // const getOrders = (filter) =>{
   //   const allOrders = orders;
@@ -52,31 +54,44 @@ export default function Orders() {
   //   return allOrders;
   // }
 
+  const [filteredOrders, setFilteredOrders] = useState(orders);
+  let [currentFilter, setCurrentFilter] = useState('all');
+
+  const setFilter = (filter:string) =>{
+    if(filter === 'all'){
+      setFilteredOrders(orders);
+    }else{
+      const filtered = orders?.filter(order => order.Parent_Order_Status2__c === filter);
+      setFilteredOrders(filtered || []);
+    }
+
+    setCurrentFilter(filter);
+  }
   const getOrderStatusCss=(status:string,element:string)=>{
     let css = '';
     if(element === 'view'){
       switch (status) {
         case 'Open':
-          css = 'bg-lime-200 border border-lime-400 rounded-3xl absolute right-5 top-5'
+          css = 'bg-lime-200 border border-lime-400 rounded-3xl absolute right-2 top-0'
           break;
         case 'Closed':
-          css = 'bg-blue-200 border border-blue-400 rounded-3xl absolute right-5 top-5'
+          css = 'bg-blue-200 border border-blue-400 rounded-3xl absolute right-2 top-0'
           break;
         case 'Cancelled':
-          css = 'bg-red-200 border border-red-400 rounded-3xl absolute right-5 top-5'
+          css = 'bg-red-200 border border-red-400 rounded-3xl absolute right-2 top-0'
           break;
         case 'Awaiting Invoice':
-          css = 'bg-purple-200 border border-purple-400 rounded-3xl absolute right-5 top-5'
+          css = 'bg-purple-200 border border-purple-400 rounded-3xl absolute right-2 top-0'
           break;
           
         case 'Pending Approval':
-          css = 'bg-amber-200 border border-amber-400 rounded-3xl absolute right-5 top-5';
+          css = 'bg-amber-200 border border-amber-400 rounded-3xl absolute right-2 top-0';
           break;
         case 'Approved':
-          css = 'bg-green-200 border border-green-400 rounded-3xl absolute right-5 top-5';
+          css = 'bg-green-200 border border-green-400 rounded-3xl absolute right-2 top-0';
           break;
         default:
-          css = 'bg-gray-200 border border-gray-400 rounded-3xl absolute right-5 top-5'
+          css = 'bg-gray-200 border border-gray-400 rounded-3xl absolute right-2 top-0'
           break;
       }
     }else{
@@ -108,9 +123,10 @@ export default function Orders() {
     return css;
   }
 
-  // useEffect(()=>{
-  //   getOrders('all');
-  // },[]);
+  useEffect(()=>{
+    console.log('Orders Screen Mounted');
+    console.log('Categories from store: ',ordersCategory);
+  },[]);
 
 
 
@@ -136,50 +152,35 @@ export default function Orders() {
         }}
 
       >
-        <TouchableOpacity className="border p-2 border-gray-400 rounded-xl bg-white">
+        {/* <TouchableOpacity className="border p-2 border-gray-400 rounded-xl bg-white">
           <Filters height={18} width={18} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <FilterButton
+<FilterButton
           label="All"
-          active={filter === 'all'}
+          active={currentFilter === 'all'}
           onPress={() => setFilter('all')}
         />
+{ordersCategory.length>0 && ordersCategory.map((category:any,index:number)=>
         <FilterButton
-          label="Delivered"
-          active={filter === 'delivered'}
-          onPress={() => setFilter('delivered')}
+          key={index}
+          label={category.label}
+          active={currentFilter === category.value}
+          onPress={() => setFilter(category.value)}
         />
-        <FilterButton
-          label="In Transit"
-          active={filter === 'inTransit'}
-          onPress={() => setFilter('inTransit')}
-        />
-        <FilterButton
-          label="Processing"
-          active={filter === 'processing'}
-          onPress={() => setFilter('processing')}
-        />
-        <FilterButton
-          label="Scheduled"
-          active={filter === 'scheduled'}
-          onPress={() => setFilter('scheduled')}
-        />
-        <FilterButton
-          label= "Cancelled"
-          active={filter === 'cancelled'}
-          onPress={() => setFilter('cancelled')}
-        />
+)}
+        
+        
       </ScrollView>
 
       <ScrollView className='w-[100%] mx-auto' contentContainerStyle={{
-        paddingBottom:350
+        paddingBottom:200
       }}
       
       contentContainerClassName='overflow-visible '
       >
 
-      {orders?.map((order,index)=>(
+      {filteredOrders?.map((order,index)=>(
         <TouchableOpacity className='w-[85%] mx-auto shadow-xl p-4 border border-gray-300 rounded-xl mt-6 bg-white' key={index} onPress={() =>
             navigation.navigate('OrdersStack',{
               screen: 'OrderDetails',
@@ -188,8 +189,8 @@ export default function Orders() {
             >
 
           <View  className=''>
-            <View className={getOrderStatusCss(order.FConnect__Order_Status__c,'view')}>
-              <Text className={getOrderStatusCss(order.FConnect__Order_Status__c,'text')}>{order.FConnect__Order_Status__c}</Text>
+            <View className={getOrderStatusCss(order.Parent_Order_Status2__c,'view')}>
+              <Text className={getOrderStatusCss(order.Parent_Order_Status2__c,'text')}>{order.Parent_Order_Status2__c}</Text>
             </View>
             
             <Text className='text-xl font-medium p-1'>
@@ -209,12 +210,12 @@ export default function Orders() {
 
               <View className="w-[48%] p-1 rounded-lg">
                 <Text className="text-gray-600">Start</Text>
-                <Text className="font-medium">{order.Last_Event_Start_Date__c}</Text>
+                <Text className="font-medium">{formatIsoToDDMMYY(order.Last_Event_Start_Date__c)}</Text>
               </View>
 
               <View className="w-[48%] p-1 rounded-lg">
                 <Text className="text-gray-600">End</Text>
-                <Text className="font-medium">{order.Last_Event_End_Date__c}</Text>
+                <Text className="font-medium">{formatIsoToDDMMYY(order.Last_Event_End_Date__c)}</Text>
               </View>
             </View>
 

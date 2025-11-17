@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
-type Tab = 'profile' | 'orders' | 'help' | 'contact';
+type Tab = 'profile' | 'orders' | 'service' | 'contact';
 
 type NavContextType = {
   activeTab: Tab;

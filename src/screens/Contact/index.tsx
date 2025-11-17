@@ -44,9 +44,6 @@ export default function Contact() {
           </View>
         </View>
 
-        <TouchableOpacity className="mx-auto bg-rose-900 py-4 px-6 rounded-xl w-full">
-          <Text className="text-white text-left text-medium">Send Message</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

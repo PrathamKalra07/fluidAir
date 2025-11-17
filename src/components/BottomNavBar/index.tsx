@@ -9,10 +9,13 @@ import Profile2 from '../../assets/profile2.svg';
 import Profile2Black from '../../assets/profile2black.svg';
 import OrdersBlack from '../../assets/ordersBlack.svg';
 import OrdersRed from '../../assets/ordersRed.svg';
-import HelpRed from '../../assets/helpRed.svg';
-import HelpBlack from '../../assets/helpBlack.svg';
+// import HelpRed from '../../assets/helpRed.svg';
+// import HelpBlack from '../../assets/helpBlack.svg';
 import ContactRed from '../../assets/contactRed.svg';
 import ContactBlack from '../../assets/contactBlack.svg';
+import SettingsBlack from '../../assets/settingsBlack.svg';
+import SettingsRed from '../../assets/settingsRed.svg';
+
 
 // --------------------------------------------------------------------
 // 👇 TabButton: ultra-light, memoized, stable props
@@ -59,7 +62,7 @@ const BottomNavBar = () => {
 
   // ✅ useCallback ensures handleTabPress has a stable reference
   const handleTabPress = useCallback(
-    (tab: 'profile' | 'orders' | 'help' | 'contact') => {
+    (tab: 'profile' | 'orders' | 'service' | 'contact') => {
       if (tab !== activeTab) {
         setActiveTab(tab);
         // Optional: navigate if needed — can skip for pure tab switch speed
@@ -107,11 +110,11 @@ const BottomNavBar = () => {
         onPress={handleTabPress}
       />
       <TabButton
-        id="help"
-        label="Help"
-        ActiveIcon={HelpRed}
-        InactiveIcon={HelpBlack}
-        isActive={activeTab === 'help'}
+        id="service"
+        label="Service"
+        ActiveIcon={SettingsRed}
+        InactiveIcon={SettingsBlack}
+        isActive={activeTab === 'service'}
         onPress={handleTabPress}
       />
       <TabButton

@@ -5,6 +5,7 @@ import { fetchOrders } from './ordersSlice';
 
 type AccountState = {
   account: Record<string, any> | null;
+  accountName: string | null;
   products: Record<string, any>[];
   sessionId: string | null;
   loading: boolean;
@@ -13,6 +14,7 @@ type AccountState = {
 
 const initialState: AccountState = {
   account: null,
+  accountName: null,
   products: [],
   sessionId: null,
   loading: false,
@@ -27,10 +29,10 @@ export const fetchAccountData = createAsyncThunk(
       const token = sessionRes.data;
       const accountData = await getAccountDetails(token, userInfo);
       const productsData = await getAccountProducts(token, accountData);
-
+      const accountName = accountData?.Primary_Contact__r?.Name || null;
       dispatch(fetchOrders({ token, account: accountData }));
 
-      return { account: accountData, products: productsData, sessionId: token };
+      return { account: accountData, accountName : accountName, products: productsData, sessionId: token };
     } catch (error: any) {
       throw error;
     }
@@ -50,6 +52,7 @@ const accountSlice = createSlice({
       .addCase(fetchAccountData.fulfilled, (state, action) => {
         state.loading = false;
         state.account = action.payload.account;
+        state.accountName = action.payload.accountName;
         state.products = action.payload.products;
         state.sessionId = action.payload.sessionId;
       })
